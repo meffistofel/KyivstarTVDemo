@@ -53,7 +53,9 @@ class PagingSectionFooterView: UICollectionReusableView, ReusableView {
 
         addSubview(pageControl)
 
-        pageControl.centerInSuperview(size: .init(width: 120, height: 6))
+        
+        pageControl.centerInSuperview(size: .init(width: 120, height: 0))
+        pageControl.anchor(bottom: .init(anchor: bottomAnchor, padding: 8))
     }
 
     override func prepareForReuse() {

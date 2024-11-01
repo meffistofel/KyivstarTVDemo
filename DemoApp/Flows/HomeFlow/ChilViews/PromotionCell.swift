@@ -32,10 +32,9 @@ class PromotionCell: UICollectionViewCell, ReusableView {
 
         imageView.equalToSuperview()
         pageControl.anchor(
-            leading: contentView.leadingAnchor,
-            bottom: contentView.bottomAnchor,
-            trailing: contentView.trailingAnchor,
-            padding: .init(top: 0, left: 16, bottom: 16, right: 16)
+            leading: .init(anchor: contentView.leadingAnchor, padding: 16),
+            bottom: .init(anchor: contentView.bottomAnchor, padding: 16),
+            trailing: .init(anchor: contentView.trailingAnchor, padding: 16)
         )
     }
 

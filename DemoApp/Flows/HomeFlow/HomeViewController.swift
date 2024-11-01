@@ -152,14 +152,16 @@ extension HomeViewController {
                 }
             }
 
+            guard Section(rawValue: indexPath.section) != .promotions else {
+                return nil
+            }
+
             let header: HomeSectionHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
 
             switch Section(rawValue: indexPath.section) {
             case .categories:
                 header.config(with: "Категорії")
             case .groups:
-                header.config(with: "Категорії")
-            case .promotions:
                 header.config(with: "Категорії")
             default:
                 break
