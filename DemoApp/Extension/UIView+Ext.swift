@@ -8,13 +8,18 @@
 import UIKit
 
 extension UIView {
+    struct AnchorModel<AnchorType> {
+        let anchor: AnchorType
+        let padding: CGFloat
+    }
+
     @discardableResult
     func anchor(
-        top: NSLayoutYAxisAnchor? = nil,
-        leading: NSLayoutXAxisAnchor? = nil,
-        bottom: NSLayoutYAxisAnchor? = nil,
-        trailing: NSLayoutXAxisAnchor? = nil,
-        padding: UIEdgeInsets = .zero,
+        top: AnchorModel<NSLayoutYAxisAnchor>? = nil,
+        leading: AnchorModel<NSLayoutXAxisAnchor>? = nil,
+        bottom: AnchorModel<NSLayoutYAxisAnchor>? = nil,
+        trailing: AnchorModel<NSLayoutXAxisAnchor>? = nil,
+//        padding: UIEdgeInsets = .zero,
         size: CGSize = .zero
     ) -> [NSLayoutConstraint] {
 
@@ -23,19 +28,19 @@ extension UIView {
         var constraints = [NSLayoutConstraint]()
 
         if let top = top {
-            constraints.append(self.topAnchor.constraint(equalTo: top, constant: padding.top))
+            constraints.append(self.topAnchor.constraint(equalTo: top.anchor, constant: top.padding))
         }
 
         if let leading = leading {
-            constraints.append(self.leadingAnchor.constraint(equalTo: leading, constant: padding.left))
+            constraints.append(self.leadingAnchor.constraint(equalTo: leading.anchor, constant: leading.padding))
         }
 
         if let bottom = bottom {
-            constraints.append(self.bottomAnchor.constraint(equalTo: bottom, constant: -padding.bottom))
+            constraints.append(self.bottomAnchor.constraint(equalTo: bottom.anchor, constant: -bottom.padding))
         }
 
         if let trailing = trailing {
-            constraints.append(self.trailingAnchor.constraint(equalTo: trailing, constant: -padding.right))
+            constraints.append(self.trailingAnchor.constraint(equalTo: trailing.anchor, constant: -trailing.padding))
         }
 
         if size.width != 0 {
@@ -82,13 +87,12 @@ extension UIView {
            guard let superview = self.superview else {
                return []
            }
-
+           
            return anchor(
-               top: superview.topAnchor,
-               leading: superview.leadingAnchor,
-               bottom: superview.bottomAnchor,
-               trailing: superview.trailingAnchor,
-               padding: padding
+            top: .init(anchor: superview.topAnchor, padding: padding.top),
+            leading: .init(anchor: superview.leadingAnchor, padding: padding.left),
+            bottom: .init(anchor: superview.bottomAnchor, padding: padding.bottom),
+            trailing: .init(anchor: superview.trailingAnchor, padding: padding.right)
            )
        }
 

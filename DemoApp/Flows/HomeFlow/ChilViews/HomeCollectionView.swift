@@ -49,15 +49,19 @@ class HomeCollectionView: UICollectionView {
     }
 
     private func categorySectionLayout(size: CGSize, sectionIndex: Int) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let sectionPadding: CGFloat = 24
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8), heightDimension: .estimated(180))
+        let groupWidth = (size.width - sectionPadding * 2) // Віднімемо відступи ліворуч і праворуч
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(groupWidth), heightDimension: .absolute(groupWidth/3))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.interItemSpacing = .fixed(8)
 
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        section.interGroupSpacing = 20
+        section.interGroupSpacing = 8
+        section.contentInsets = .init(top: 0, leading: sectionPadding, bottom: 0, trailing: sectionPadding)
 
         addHeader(to: section)
 
@@ -79,7 +83,6 @@ class HomeCollectionView: UICollectionView {
         section.interGroupSpacing = interGroupSpacing
 
         addPager(to: section)
-        addHeader(to: section)
 
         section.visibleItemsInvalidationHandler = { [weak self] _, offset, environment in
             guard let self else { return }
