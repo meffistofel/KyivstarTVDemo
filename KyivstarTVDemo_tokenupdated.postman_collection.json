@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "2e68120b-9ae8-4a24-8330-131193f27788",
+		"name": "KyivstarTV Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4458119"
+	},
+	"item": [
+		{
+			"name": "getContentGroups",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "u0xj6pw0fdf7m2l1dvcic7uolk45e79itgin54l8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.json-generator.com/templates/PGgg02gplft-/data",
+					"protocol": "https",
+					"host": [
+						"api",
+						"json-generator",
+						"com"
+					],
+					"path": [
+						"templates",
+						"PGgg02gplft-",
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPromotions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "u0xj6pw0fdf7m2l1dvcic7uolk45e79itgin54l8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.json-generator.com/templates/j_BRMrbcY-5W/data",
+					"protocol": "https",
+					"host": [
+						"api",
+						"json-generator",
+						"com"
+					],
+					"path": [
+						"templates",
+						"j_BRMrbcY-5W",
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCategories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "u0xj6pw0fdf7m2l1dvcic7uolk45e79itgin54l8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.json-generator.com/templates/eO-fawoGqaNB/data",
+					"protocol": "https",
+					"host": [
+						"api",
+						"json-generator",
+						"com"
+					],
+					"path": [
+						"templates",
+						"eO-fawoGqaNB",
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAssetDetails",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "u0xj6pw0fdf7m2l1dvcic7uolk45e79itgin54l8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.json-generator.com/templates/04Pl5AYhO6-n/data",
+					"protocol": "https",
+					"host": [
+						"api",
+						"json-generator",
+						"com"
+					],
+					"path": [
+						"templates",
+						"04Pl5AYhO6-n",
+						"data"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
