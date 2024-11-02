@@ -7,17 +7,32 @@
 
 import Foundation
 
-struct ContentGroupModel: Hashable, Decodable {
+struct ContentGroupModel: Decodable {
     let id, name: String
-    let type: [String]
+    let type: [GroupType]
     let assets: [Asset]
     let hidden: Bool
     let sortIndex: Int
     let canBeDeleted: Bool
 }
 
+enum GroupType: String, Decodable, CaseIterable {
+    case series = "SERIES"
+    case liveChannel = "LIVECHANNEL"
+    case epg = "EPG"
+    case unknown
+
+    init(from decoder: Decoder) throws {
+        guard let value = try? decoder.singleValueContainer().decode(String.self) else{
+            self = .unknown
+            return
+        }
+        self = GroupType(rawValue: value) ?? .unknown
+    }
+}
+
 // MARK: - Asset
-struct Asset: Hashable, Decodable, Identifiable {
+struct Asset: Decodable, Identifiable {
     let id, name: String
     let image: String
     let company: String

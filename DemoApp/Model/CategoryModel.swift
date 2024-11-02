@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct CategoryModel: Hashable, Decodable {
+struct CategoryModel: Decodable {
     let categories: [Category]
 }
 
 // MARK: - Category
-struct Category: Hashable, Decodable, Identifiable {
+struct Category: Decodable, Identifiable {
     let id, name: String
     let image: String
 }

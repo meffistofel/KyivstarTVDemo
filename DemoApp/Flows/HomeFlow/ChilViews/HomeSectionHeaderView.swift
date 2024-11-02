@@ -63,22 +63,8 @@ extension HomeSectionHeaderView {
         stackViewHorizontal.addArrangedSubview(deleteButton)
 
         addSubview(stackViewHorizontal)
-//        addSubview(deleteButton)
 
-        stackViewHorizontal.equalToSuperview()
-
-//        titleLabel.anchor(
-//            top: topAnchor,
-//            leading: leadingAnchor,
-//            bottom: bottomAnchor,
-//            padding: .init(top: 0, left: 24, bottom: 0, right: 0)
-//        )
-//        deleteButton.anchor(
-//            top: topAnchor,
-//            bottom: bottomAnchor,
-//            trailing: trailingAnchor,
-//            padding: .init(top: 0, left: 0, bottom: 0, right: 24)
-//        )
+        stackViewHorizontal.equalToSuperview(padding: .init(top: 0, left: 0, bottom: 8, right: 0))
     }
 }
 

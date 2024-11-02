@@ -15,7 +15,7 @@ protocol HomeVMProtocol {
 
     func getPromotion(id: Promotion.ID) -> Promotion?
     func getCategory(id: Category.ID) -> Category?
-    func getContentGroup(id: Asset.ID) -> Asset?
+    func getContentGroup(section: Section, id: Asset.ID) -> Asset?
 }
 
 enum HomeVMInput {
@@ -32,12 +32,16 @@ enum HomeVMOutput {
 
 enum Section: Int, CaseIterable {
     case promotions
-    case groups
     case categories
+    case series
+    case liveChannel
+    case epg
 }
 
 enum SectionItem: Hashable {
-    case groups(Asset.ID)
+    case epg(Asset.ID)
+    case liveChannel(Asset.ID)
+    case series(Asset.ID)
     case promotions(Promotion.ID)
     case categories(Category.ID)
 }

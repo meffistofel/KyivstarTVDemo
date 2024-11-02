@@ -19,7 +19,6 @@ extension UIView {
         leading: AnchorModel<NSLayoutXAxisAnchor>? = nil,
         bottom: AnchorModel<NSLayoutYAxisAnchor>? = nil,
         trailing: AnchorModel<NSLayoutXAxisAnchor>? = nil,
-//        padding: UIEdgeInsets = .zero,
         size: CGSize = .zero
     ) -> [NSLayoutConstraint] {
 
@@ -107,4 +106,41 @@ extension UIView {
 
         return [widthConstraint, heightConstraint]
     }
+
+    @discardableResult
+    func height(_ height: CGFloat) -> [NSLayoutConstraint] {
+        self.translatesAutoresizingMaskIntoConstraints = false
+
+        let heightConstraint = self.heightAnchor.constraint(equalToConstant: height)
+
+        NSLayoutConstraint.activate([heightConstraint])
+
+        return [heightConstraint]
+    }
+
+    @discardableResult
+    func width(_ width: CGFloat) -> [NSLayoutConstraint] {
+        self.translatesAutoresizingMaskIntoConstraints = false
+
+        let widthConstraint = self.widthAnchor.constraint(equalToConstant: width)
+
+        NSLayoutConstraint.activate([widthConstraint])
+
+        return [widthConstraint]
+    }
+
+    @discardableResult
+       func sizeWithAspectRatio(widthRatio: CGFloat, heightRatio: CGFloat) -> [NSLayoutConstraint] {
+           self.translatesAutoresizingMaskIntoConstraints = false
+
+           // Вираховуємо співвідношення ширини до висоти
+           let aspectRatio = widthRatio / heightRatio
+
+           // Створюємо constraint для співвідношення сторін (width:height = widthRatio:heightRatio)
+           let aspectRatioConstraint = self.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: aspectRatio)
+
+           NSLayoutConstraint.activate([aspectRatioConstraint])
+
+           return [aspectRatioConstraint]
+       }
 }

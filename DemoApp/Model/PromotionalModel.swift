@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct PromotionalModel: Hashable, Decodable {
+struct PromotionalModel: Decodable {
     let id: String
     let name: String
     let promotions: [Promotion]
 }
 
 // MARK: - Promotion Structure
-struct Promotion: Hashable, Decodable, Identifiable {
+struct Promotion: Decodable, Identifiable {
     let id: String
     let name: String
     let image: String
