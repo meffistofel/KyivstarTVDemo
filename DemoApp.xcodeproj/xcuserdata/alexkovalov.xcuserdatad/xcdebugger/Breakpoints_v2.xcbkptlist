@@ -55,16 +55,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "880BB72A-AE9B-4603-AD8B-FF2E3224C2EB"
+            uuid = "97734661-6735-4F5A-8B65-47413C5FEA3B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DemoApp/Flows/HomeFlow/ChilViews/SeriesCell.swift"
+            filePath = "DemoApp/Flows/HomeFlow/HomeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "layoutSubviews()"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "getContentGroup(section:id:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

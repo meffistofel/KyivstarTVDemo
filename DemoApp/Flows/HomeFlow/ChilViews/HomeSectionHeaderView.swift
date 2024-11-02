@@ -9,6 +9,8 @@ import SwiftUI
 
 class HomeSectionHeaderView: UICollectionReusableView, ReusableView {
 
+    var onTapDelete: (() -> Void)?
+
     private lazy var stackViewHorizontal: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
@@ -53,7 +55,7 @@ class HomeSectionHeaderView: UICollectionReusableView, ReusableView {
 
 extension HomeSectionHeaderView {
     @objc private func buttonTapped() {
-        print("Button was tapped!")
+        onTapDelete?()
     }
 
     private func setupView() {
