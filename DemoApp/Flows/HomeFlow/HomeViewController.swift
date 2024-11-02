@@ -121,37 +121,44 @@ extension HomeViewController {
 
     private func setupDataSource() -> UICollectionViewDiffableDataSource<Section, SectionItem> {
         UICollectionViewDiffableDataSource(collectionView: collectionView) { [unowned self] collectionView, indexPath, itemIdentifier in
-            let section = Section(rawValue: indexPath.section) ?? .categories
+            guard let section = dataSource.sectionIdentifier(for: indexPath.section) else {
+                return nil
+            }
 
             switch itemIdentifier {
             case .categories(let id):
                 let cell: CategoryCell = collectionView.dequeueReusableCell(for: indexPath)
-                let category: Category = viewModel.getCategory(id: id)!
-                cell.configure(with: .init(model: category))
+                if let category: Category = viewModel.getCategory(id: id) {
+                    cell.configure(with: .init(model: category))
+                }
 
                 return cell
             case .promotions(let id):
                 let cell: PromotionCell = collectionView.dequeueReusableCell(for: indexPath)
-                let promotion: Promotion = viewModel.getPromotion(id: id)!
-                cell.configure(with: .init(model: promotion))
+                if let promotion: Promotion = viewModel.getPromotion(id: id) {
+                    cell.configure(with: .init(model: promotion))
+                }
 
                 return cell
             case .epg(let id):
                 let cell: SeriesCell = collectionView.dequeueReusableCell(for: indexPath)
-                let group: Asset = viewModel.getContentGroup(section: section, id: id)!
-                cell.configure(with: .init(model: group))
+                if let group: Asset = viewModel.getContentGroup(section: section, id: id) {
+                    cell.configure(with: .init(model: group))
+                }
 
                 return cell
             case .liveChannel(let id):
                 let cell: SeriesCell = collectionView.dequeueReusableCell(for: indexPath)
-                let group: Asset = viewModel.getContentGroup(section: section, id: id)!
-                cell.configure(with: .init(model: group))
+                if let group: Asset = viewModel.getContentGroup(section: section, id: id) {
+                    cell.configure(with: .init(model: group))
+                }
 
                 return cell
             case .series(let id):
                 let cell: SeriesCell = collectionView.dequeueReusableCell(for: indexPath)
-                let group: Asset = viewModel.getContentGroup(section: section, id: id)!
-                cell.configure(with: .init(model: group))
+                if let group: Asset = viewModel.getContentGroup(section: section, id: id) {
+                    cell.configure(with: .init(model: group))
+                }
 
                 return cell
             }
@@ -161,8 +168,12 @@ extension HomeViewController {
     private func configSupplementaryView() {
         dataSource.supplementaryViewProvider = { [unowned self] (collectionView, kind, indexPath) in
 
+            guard let section = dataSource.sectionIdentifier(for: indexPath.section) else {
+                return nil
+            }
+
             if kind == SupplementaryType.pager.rawValue {
-                if let section = Section(rawValue: indexPath.section), section == .promotions {
+                if section == .promotions {
                     let pagingFooter: PagingSectionFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
 
                     let itemCount = dataSource.snapshot().numberOfItems(inSection: section)
@@ -174,23 +185,17 @@ extension HomeViewController {
                 }
             }
 
-            guard Section(rawValue: indexPath.section) != .promotions else {
+            guard section != .promotions else {
                 return nil
             }
 
             let header: HomeSectionHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
+            let sectionTitle = viewModel.getSectionTitle(section: section) ?? ""
 
-            switch Section(rawValue: indexPath.section) {
-            case .categories:
-                header.config(with: "Категорії")
-            case .epg:
-                header.config(with: "Категорії")
-            case .liveChannel:
-                header.config(with: "Категорії")
-            case .series:
-                header.config(with: "Категорії")
-            default:
-                break
+            header.config(with: sectionTitle)
+
+            header.onTapDelete = { [weak self] in
+                self?.removeSection(section)
             }
 
             return header
@@ -205,5 +210,17 @@ extension HomeViewController {
             snapshot.appendItems(item.values, toSection: item.key)
         }
         dataSource.apply(snapshot, animatingDifferences: animated)
+    }
+
+    func removeSection(_ section: Section) {
+        // Отримуємо поточний знімок
+        var snapshot = dataSource.snapshot()
+
+        // Видаляємо секцію
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: section))
+        snapshot.deleteSections([section])
+
+        // Застосовуємо оновлений знімок
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }

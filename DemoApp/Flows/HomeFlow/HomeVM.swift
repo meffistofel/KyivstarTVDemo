@@ -25,6 +25,7 @@ final class HomeVM: HomeVMProtocol {
     private var epgsChannels: [Asset.ID: Asset] = [:]
     private var categories: [Category.ID: Category] = [:]
     private var promotions: [Promotion.ID: Promotion] = [:]
+    private var sectionTitles: [Section: String] = [:]
 
     init(coordinatorDelegate: (any HomeVMCoordinatorDelegate)? = nil, HomeWebService: any HomeWebServiceProtocol) {
         self.coordinatorDelegate = coordinatorDelegate
@@ -36,7 +37,7 @@ final class HomeVM: HomeVMProtocol {
         subscribeToTerminationStreams()
 
         Task {
-            await handleInputEvents() // Запускаємо обробку подій
+            await handleInputEvents()
         }
     }
 
@@ -68,6 +69,10 @@ extension HomeVM {
         default: nil
         }
     }
+
+    func getSectionTitle(section: Section) -> String? {
+        sectionTitles[section]
+    }
 }
 
 // MARK: Input / Output
@@ -92,11 +97,9 @@ private extension HomeVM {
             switch event {
             case .appear:
                 print("Handling appear event")
-                // Логіка для обробки події "stop"
                 send(output: .idle)
             case .cancel:
                 print("Handling cancel event")
-                // Логіка для обробки події "cancel"
                 send(output: .idle)
             case .fetchResource:
                 print("Handling fetchResource event")
@@ -111,7 +114,35 @@ private extension HomeVM {
 private extension HomeVM {
     func prepareDataSource() async -> HomeVMOutput {
         do {
-            try await loadSource()
+            async let groupsRequest = HomeWebService.getContentGroups()
+            async let promotionsRequest = HomeWebService.getPromotions()
+            async let categoriesRequest = HomeWebService.getCategories()
+
+            let (fetchedGroups, fetchedPromotions, fetchedCategories) = try await (groupsRequest, promotionsRequest, categoriesRequest)
+
+            var channels: [GroupType: [Asset.ID: Asset]] = [:]
+
+            sectionTitles = [
+                .promotions: fetchedPromotions.name,
+                .categories: "Categories", // немає в запиті поля,
+
+            ]
+
+            fetchedGroups.forEach { contentGroup in
+                contentGroup.type.forEach { contentType in
+                    if let section = Section(group: contentType) {
+                        sectionTitles[section] = contentGroup.name
+                    }
+                    channels[contentType] = Dictionary(uniqueKeysWithValues: contentGroup.assets.map { ($0.id, $0) })
+                }
+            }
+
+            self.seriesChannels = channels[.series] ?? [:]
+            self.liveChannels = channels[.liveChannel] ?? [:]
+            self.epgsChannels = channels[.epg] ?? [:]
+
+            self.categories = Dictionary(uniqueKeysWithValues: fetchedCategories.categories.map { ($0.id, $0) })
+            self.promotions = Dictionary(uniqueKeysWithValues: fetchedPromotions.promotions.map { ($0.id, $0) })
 
             let promotionsIds = promotions.keys.map { SectionItem.promotions($0) }
             let categoriesIds = categories.keys.map { SectionItem.categories($0) }
@@ -131,31 +162,5 @@ private extension HomeVM {
         } catch {
             return .error(error)
         }
-    }
-
-    func loadSource() async throws {
-        async let groups = HomeWebService.getContentGroups()
-        async let promotions = HomeWebService.getPromotions()
-        async let categories = HomeWebService.getCategories()
-
-        let (fetchedGroups, fetchedPromotions, fetchedCategories) = try await (groups, promotions, categories)
-
-        var channels: [GroupType: [Asset.ID: Asset]] = [:]
-
-        fetchedGroups.forEach { contentGroup in
-            // Проходимося по кожному типу контенту
-            contentGroup.type.forEach { contentType in
-                // Додаємо активи в словник по типу контенту
-                channels[contentType] = Dictionary(uniqueKeysWithValues: contentGroup.assets.map { ($0.id, $0) })
-            }
-        }
-
-        // Тепер ви можете отримати канали так:
-        self.seriesChannels = channels[.series] ?? [:]
-        self.liveChannels = channels[.liveChannel] ?? [:]
-        self.epgsChannels = channels[.epg] ?? [:]
-
-        self.categories = Dictionary(uniqueKeysWithValues: fetchedCategories.categories.map { ($0.id, $0) })
-        self.promotions = Dictionary(uniqueKeysWithValues: fetchedPromotions.promotions.map { ($0.id, $0) })
     }
 }
