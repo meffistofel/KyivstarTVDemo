@@ -39,6 +39,7 @@ private extension HomeViewController {
         collectionView.register(PromotionCell.self)
         collectionView.register(CategoryCell.self)
         collectionView.register(SeriesCell.self)
+        collectionView.register(LiveChannelCell.self)
         collectionView.register(PagingSectionFooterView.self, supplementaryViewOfKind: SupplementaryType.pager.rawValue)
         collectionView.register(HomeSectionHeaderView.self, supplementaryViewOfKind: SupplementaryType.header.rawValue)
         collectionView.delegate = self
@@ -148,7 +149,7 @@ extension HomeViewController {
 
                 return cell
             case .liveChannel(let id):
-                let cell: SeriesCell = collectionView.dequeueReusableCell(for: indexPath)
+                let cell: LiveChannelCell = collectionView.dequeueReusableCell(for: indexPath)
                 if let group: Asset = viewModel.getContentGroup(section: section, id: id) {
                     cell.configure(with: .init(model: group))
                 }
