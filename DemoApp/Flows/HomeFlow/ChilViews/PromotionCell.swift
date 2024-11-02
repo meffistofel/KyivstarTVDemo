@@ -16,7 +16,7 @@ class PromotionCell: UICollectionViewCell, ReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
@@ -29,8 +29,16 @@ class PromotionCell: UICollectionViewCell, ReusableView {
         task?.cancel()
         task = nil
     }
+}
 
-    private func configure() {
+extension PromotionCell {
+    func configure(with model: CellModel) {
+        task = Task {
+            await imageView.loadRemoteImageFrom(urlString: model.imageURL)
+        }
+    }
+
+    private func setupUI() {
         contentView.backgroundColor = .clear
         contentView.layer.cornerRadius = 8
         contentView.layer.masksToBounds = true
@@ -45,12 +53,6 @@ class PromotionCell: UICollectionViewCell, ReusableView {
             bottom: .init(anchor: contentView.bottomAnchor, padding: 16),
             trailing: .init(anchor: contentView.trailingAnchor, padding: 16)
         )
-    }
-
-    func configure(with model: CellModel) {
-        task = Task {
-            await imageView.loadRemoteImageFrom(urlString: model.imageURL)
-        }
     }
 }
 

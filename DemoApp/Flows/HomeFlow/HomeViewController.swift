@@ -22,7 +22,14 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView = HomeCollectionView(pagingInfoSubject: pagingInfoSubject)
+        collectionView = HomeCollectionView(
+            onChangePagerPage: { [weak self] pageInfo in
+                self?.pagingInfoSubject.send(pageInfo)
+            },
+            onGetSection: { [weak self] sectionIndex in
+                self?.dataSource.sectionIdentifier(for: sectionIndex)
+            }
+        )
         dataSource = setupDataSource()
 
         bindOutput()
@@ -40,6 +47,7 @@ private extension HomeViewController {
         collectionView.register(CategoryCell.self)
         collectionView.register(SeriesCell.self)
         collectionView.register(LiveChannelCell.self)
+        collectionView.register(EPGCell.self)
         collectionView.register(PagingSectionFooterView.self, supplementaryViewOfKind: SupplementaryType.pager.rawValue)
         collectionView.register(HomeSectionHeaderView.self, supplementaryViewOfKind: SupplementaryType.header.rawValue)
         collectionView.delegate = self
@@ -142,7 +150,7 @@ extension HomeViewController {
 
                 return cell
             case .epg(let id):
-                let cell: SeriesCell = collectionView.dequeueReusableCell(for: indexPath)
+                let cell: EPGCell = collectionView.dequeueReusableCell(for: indexPath)
                 if let group: Asset = viewModel.getContentGroup(section: section, id: id) {
                     cell.configure(with: .init(model: group))
                 }

@@ -27,7 +27,7 @@ class LiveChannelCell: UICollectionViewCell, ReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
@@ -41,7 +41,7 @@ class LiveChannelCell: UICollectionViewCell, ReusableView {
         task = nil
     }
 
-    private func configure() {
+    private func setupUI() {
         contentView.backgroundColor = .clear
         contentView.addSubview(posterImageView)
         posterImageView.equalToSuperview()

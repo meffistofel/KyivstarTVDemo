@@ -46,16 +46,16 @@ class HomeSectionHeaderView: UICollectionReusableView, ReusableView {
         super.init(coder: coder)
         setupView()
     }
-
-    func config(with title: String) {
-        titleLabel.text = "\(title)"
-        deleteButton.setTitle("Del", for: .normal)
-    }
 }
 
 extension HomeSectionHeaderView {
     @objc private func buttonTapped() {
         onTapDelete?()
+    }
+
+    func config(with title: String) {
+        titleLabel.text = "\(title.capitalizingFirstLetter())"
+        deleteButton.setTitle("Del", for: .normal)
     }
 
     private func setupView() {

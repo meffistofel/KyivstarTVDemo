@@ -14,6 +14,9 @@ struct PagingInfo: Equatable, Hashable {
 }
 
 class PagingSectionFooterView: UICollectionReusableView, ReusableView {
+
+    private var pagingInfoToken: AnyCancellable?
+
     private lazy var pageControl: UIPageControl = {
         let control = UIPageControl()
         control.translatesAutoresizingMaskIntoConstraints = false
@@ -22,8 +25,6 @@ class PagingSectionFooterView: UICollectionReusableView, ReusableView {
         control.pageIndicatorTintColor = UIColor(resource: .appFEFEFE).withAlphaComponent(0.25)
         return control
     }()
-
-    private var pagingInfoToken: AnyCancellable?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,6 +36,15 @@ class PagingSectionFooterView: UICollectionReusableView, ReusableView {
         setupView()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        pagingInfoToken?.cancel()
+        pagingInfoToken = nil
+    }
+}
+
+extension PagingSectionFooterView {
     func configure(with numberOfPages: Int) {
         pageControl.numberOfPages = numberOfPages
     }
@@ -53,15 +63,8 @@ class PagingSectionFooterView: UICollectionReusableView, ReusableView {
 
         addSubview(pageControl)
 
-        
+
         pageControl.centerInSuperview(size: .init(width: 120, height: 0))
         pageControl.anchor(bottom: .init(anchor: bottomAnchor, padding: 8))
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
-        pagingInfoToken?.cancel()
-        pagingInfoToken = nil
     }
 }
