@@ -20,7 +20,9 @@ final class HomeVM: HomeVMProtocol {
     weak var coordinatorDelegate: (any HomeVMCoordinatorDelegate)?
     private let HomeWebService: any HomeWebServiceProtocol
 
-    private var groups: [Asset.ID: Asset] = [:]
+    private var seriesChannels: [Asset.ID: Asset] = [:]
+    private var liveChannels: [Asset.ID: Asset] = [:]
+    private var epgsChannels: [Asset.ID: Asset] = [:]
     private var categories: [Category.ID: Category] = [:]
     private var promotions: [Promotion.ID: Promotion] = [:]
 
@@ -55,8 +57,16 @@ extension HomeVM {
         categories[id]
     }
 
-    func getContentGroup(id: Asset.ID) -> Asset? {
-        groups[id]
+    func getContentGroup(section: Section, id: Asset.ID) -> Asset? {
+        switch section {
+        case .series:
+            seriesChannels[id]
+        case .liveChannel:
+            liveChannels[id]
+        case .epg:
+            epgsChannels[id]
+        default: nil
+        }
     }
 }
 
@@ -90,7 +100,7 @@ private extension HomeVM {
                 send(output: .idle)
             case .fetchResource:
                 print("Handling fetchResource event")
-                let output = await getDataSource()
+                let output = await prepareDataSource()
                 send(output: output)
             }
         }
@@ -99,18 +109,22 @@ private extension HomeVM {
 
 
 private extension HomeVM {
-    func getDataSource() async -> HomeVMOutput {
+    func prepareDataSource() async -> HomeVMOutput {
         do {
-            try await getSource()
+            try await loadSource()
 
             let promotionsIds = promotions.keys.map { SectionItem.promotions($0) }
-            let categories = categories.keys.map { SectionItem.categories($0) }
-            let groups = groups.keys.map { SectionItem.groups($0) }
+            let categoriesIds = categories.keys.map { SectionItem.categories($0) }
+            let seriesIds = seriesChannels.keys.map { SectionItem.series($0) }
+            let livesIds = liveChannels.keys.map { SectionItem.liveChannel($0) }
+            let epgsIds = epgsChannels.keys.map { SectionItem.epg($0) }
 
             let sectionsData: [SectionData] = [
                 SectionData(key: .promotions, values: promotionsIds),
-                SectionData(key: .categories, values: categories),
-                SectionData(key: .groups, values: groups)
+                SectionData(key: .categories, values: categoriesIds),
+                SectionData(key: .series, values: seriesIds),
+                SectionData(key: .liveChannel, values: livesIds),
+                SectionData(key: .epg, values: epgsIds)
             ]
 
             return .fetchedResource(sectionsData)
@@ -119,14 +133,28 @@ private extension HomeVM {
         }
     }
 
-    func getSource() async throws {
+    func loadSource() async throws {
         async let groups = HomeWebService.getContentGroups()
         async let promotions = HomeWebService.getPromotions()
         async let categories = HomeWebService.getCategories()
 
         let (fetchedGroups, fetchedPromotions, fetchedCategories) = try await (groups, promotions, categories)
 
-        self.groups = Dictionary(uniqueKeysWithValues: fetchedGroups.flatMap { $0.assets }.map { ($0.id, $0) })
+        var channels: [GroupType: [Asset.ID: Asset]] = [:]
+
+        fetchedGroups.forEach { contentGroup in
+            // Проходимося по кожному типу контенту
+            contentGroup.type.forEach { contentType in
+                // Додаємо активи в словник по типу контенту
+                channels[contentType] = Dictionary(uniqueKeysWithValues: contentGroup.assets.map { ($0.id, $0) })
+            }
+        }
+
+        // Тепер ви можете отримати канали так:
+        self.seriesChannels = channels[.series] ?? [:]
+        self.liveChannels = channels[.liveChannel] ?? [:]
+        self.epgsChannels = channels[.epg] ?? [:]
+
         self.categories = Dictionary(uniqueKeysWithValues: fetchedCategories.categories.map { ($0.id, $0) })
         self.promotions = Dictionary(uniqueKeysWithValues: fetchedPromotions.promotions.map { ($0.id, $0) })
     }

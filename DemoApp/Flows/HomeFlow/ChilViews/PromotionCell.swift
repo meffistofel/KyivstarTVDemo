@@ -12,6 +12,8 @@ class PromotionCell: UICollectionViewCell, ReusableView {
     private let imageView = UIImageView()
     private let pageControl = UIPageControl()
 
+    private var task: Task<Void, Never>?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -19,6 +21,13 @@ class PromotionCell: UICollectionViewCell, ReusableView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+        task?.cancel()
+        task = nil
     }
 
     private func configure() {
@@ -39,7 +48,9 @@ class PromotionCell: UICollectionViewCell, ReusableView {
     }
 
     func configure(with model: CellModel) {
-        imageView.loadRemoteImageFrom(urlString: model.imageURL)
+        task = Task {
+            await imageView.loadRemoteImageFrom(urlString: model.imageURL)
+        }
     }
 }
 

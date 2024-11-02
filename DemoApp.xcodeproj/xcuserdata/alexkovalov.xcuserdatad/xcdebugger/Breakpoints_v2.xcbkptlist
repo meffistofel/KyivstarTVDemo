@@ -55,16 +55,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B7265008-70C1-4C09-B06A-27AD4DD7E481"
+            uuid = "880BB72A-AE9B-4603-AD8B-FF2E3224C2EB"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DemoApp/Extension/UI/UIImageView+Async.swift"
+            filePath = "DemoApp/Flows/HomeFlow/ChilViews/SeriesCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "loadRemoteImageFrom(urlString:)"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
+            landmarkName = "layoutSubviews()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

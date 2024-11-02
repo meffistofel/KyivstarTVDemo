@@ -38,7 +38,7 @@ private extension HomeViewController {
     func configureCollectionView() {
         collectionView.register(PromotionCell.self)
         collectionView.register(CategoryCell.self)
-        collectionView.register(GroupCell.self)
+        collectionView.register(SeriesCell.self)
         collectionView.register(PagingSectionFooterView.self, supplementaryViewOfKind: SupplementaryType.pager.rawValue)
         collectionView.register(HomeSectionHeaderView.self, supplementaryViewOfKind: SupplementaryType.header.rawValue)
         collectionView.delegate = self
@@ -67,11 +67,19 @@ extension HomeViewController: UICollectionViewDelegate {
             guard case let .categories(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
-        case .groups:
-            guard case let .groups(id) = dataSource.itemIdentifier(for: indexPath) else {
+        case .promotions:
+            guard case let .promotions(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
-        case .promotions:
+        case .series:
+            guard case let .promotions(id) = dataSource.itemIdentifier(for: indexPath) else {
+                return
+            }
+        case .liveChannel:
+            guard case let .promotions(id) = dataSource.itemIdentifier(for: indexPath) else {
+                return
+            }
+        case .epg:
             guard case let .promotions(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
@@ -113,6 +121,8 @@ extension HomeViewController {
 
     private func setupDataSource() -> UICollectionViewDiffableDataSource<Section, SectionItem> {
         UICollectionViewDiffableDataSource(collectionView: collectionView) { [unowned self] collectionView, indexPath, itemIdentifier in
+            let section = Section(rawValue: indexPath.section) ?? .categories
+
             switch itemIdentifier {
             case .categories(let id):
                 let cell: CategoryCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -120,16 +130,28 @@ extension HomeViewController {
                 cell.configure(with: .init(model: category))
 
                 return cell
-            case .groups(let id):
-                let cell: GroupCell = collectionView.dequeueReusableCell(for: indexPath)
-                let group: Asset = viewModel.getContentGroup(id: id)!
-                cell.configure(with: .init(model: group))
-
-                return cell
             case .promotions(let id):
                 let cell: PromotionCell = collectionView.dequeueReusableCell(for: indexPath)
                 let promotion: Promotion = viewModel.getPromotion(id: id)!
                 cell.configure(with: .init(model: promotion))
+
+                return cell
+            case .epg(let id):
+                let cell: SeriesCell = collectionView.dequeueReusableCell(for: indexPath)
+                let group: Asset = viewModel.getContentGroup(section: section, id: id)!
+                cell.configure(with: .init(model: group))
+
+                return cell
+            case .liveChannel(let id):
+                let cell: SeriesCell = collectionView.dequeueReusableCell(for: indexPath)
+                let group: Asset = viewModel.getContentGroup(section: section, id: id)!
+                cell.configure(with: .init(model: group))
+
+                return cell
+            case .series(let id):
+                let cell: SeriesCell = collectionView.dequeueReusableCell(for: indexPath)
+                let group: Asset = viewModel.getContentGroup(section: section, id: id)!
+                cell.configure(with: .init(model: group))
 
                 return cell
             }
@@ -161,7 +183,11 @@ extension HomeViewController {
             switch Section(rawValue: indexPath.section) {
             case .categories:
                 header.config(with: "Категорії")
-            case .groups:
+            case .epg:
+                header.config(with: "Категорії")
+            case .liveChannel:
+                header.config(with: "Категорії")
+            case .series:
                 header.config(with: "Категорії")
             default:
                 break

@@ -12,7 +12,8 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 
 extension UIImageView {
 
-    func loadRemoteImageFrom(urlString: String){
+    @MainActor
+    func loadRemoteImageFrom(urlString: String) async {
         guard let url = URL(string: urlString) else {
             return
         }
@@ -25,22 +26,20 @@ extension UIImageView {
             return
         }
 
-        URLSession.shared.dataTask(with: url) {
-            data, response, error in
-            DispatchQueue.main.async {
-                self.hideActivityIndicatorView()
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            self.hideActivityIndicatorView()
+
+            if let imageToCache = UIImage(data: data) {
+                imageCache.setObject(imageToCache, forKey: urlString as AnyObject)
+                self.image = imageToCache
+            } else {
+                self.image = UIImage(systemName: "people")
             }
-            if let response = data {
-                DispatchQueue.main.async {
-                    if let imageToCache = UIImage(data: response) {
-                        imageCache.setObject(imageToCache, forKey: urlString as AnyObject)
-                        self.image = imageToCache
-                    } else {
-                        self.image = UIImage(systemName: "people")
-                    }
-                }
-            }
-        }.resume()
+        } catch  {
+            print(error)
+        }
     }
 }
 
