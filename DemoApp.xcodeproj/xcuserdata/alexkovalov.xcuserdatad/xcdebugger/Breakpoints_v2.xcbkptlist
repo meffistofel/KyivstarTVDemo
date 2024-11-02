@@ -71,16 +71,48 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "61DF51AA-C188-4251-9F5E-318A7725F6E1"
+            uuid = "9289BC2A-AFB3-43AE-97EC-D3BCCEA09388"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DemoApp/Flows/HomeFlow/ChilViews/LiveChannelCell.swift"
+            filePath = "DemoApp/Extension/UI/UIImageView+Async.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "configure()"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "loadRemoteImageFrom(urlString:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A536FF17-8CC7-4CBB-9BD0-FA0F197BF8C3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DemoApp/Extension/UI/UIImageView+Async.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "loadRemoteImageFrom(urlString:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "11766AB4-945C-4FB4-9645-DA782508FCC8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DemoApp/Flows/HomeFlow/ChilViews/HomeCollectionView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "sectionLayout(itemWidthDimensio:itemHeightDimensio:groupWidthDimensio:groupHeightDimensio:interItemSpacing:interGroupSpacing:sectionPadding:sectionIndex:isNeedPager:isNeedHeader:scrollingBehavior:onChangePagerPage:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -13,7 +13,7 @@ class CategoryCell: UICollectionViewCell, ReusableView {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .sfProRounded(.medium, size: 12)
+        label.font = .sfProRounded(.bold, size: 12)
         label.textColor = UIColor(resource: .app1E2228)
         label.textAlignment = .left
 
@@ -37,7 +37,7 @@ class CategoryCell: UICollectionViewCell, ReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
@@ -50,8 +50,19 @@ class CategoryCell: UICollectionViewCell, ReusableView {
         task?.cancel()
         task = nil
     }
+}
 
-    private func configure() {
+extension CategoryCell {
+    func configure(with model: CellModel) {
+        titleLabel.text = model.name
+        titleLabel.textAlignment = .center
+
+        task = Task {
+            await imageView.loadRemoteImageFrom(urlString: model.imageURL)
+        }
+    }
+
+    private func setupUI() {
         contentView.backgroundColor = .clear
         imageView.layer.cornerRadius = 12
         imageView.layer.masksToBounds = true
@@ -62,14 +73,6 @@ class CategoryCell: UICollectionViewCell, ReusableView {
         contentView.addSubview(vStack)
 
         vStack.equalToSuperview()
-    }
-
-    func configure(with model: CellModel) {
-        titleLabel.text = model.name
-        titleLabel.textAlignment = .center
-        task = Task {
-            await imageView.loadRemoteImageFrom(urlString: model.imageURL)
-        }
     }
 }
 

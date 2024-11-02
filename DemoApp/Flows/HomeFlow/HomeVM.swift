@@ -131,9 +131,18 @@ private extension HomeVM {
             fetchedGroups.forEach { contentGroup in
                 contentGroup.type.forEach { contentType in
                     if let section = Section(group: contentType) {
-                        sectionTitles[section] = contentGroup.name
+                        sectionTitles[section] = contentType.rawValue
                     }
-                    channels[contentType] = Dictionary(uniqueKeysWithValues: contentGroup.assets.map { ($0.id, $0) })
+
+                    // Перевіряємо, чи вже існує ключ у словнику
+                    if let existingAssets = channels[contentType] {
+                        // Якщо існує, об'єднуємо старі і нові значення
+                        let newAssets = Dictionary(uniqueKeysWithValues: contentGroup.assets.map { ($0.id, $0) })
+                        channels[contentType] = existingAssets.merging(newAssets) { (current, _) in current }
+                    } else {
+                        // Якщо не існує, просто додаємо нові значення
+                        channels[contentType] = Dictionary(uniqueKeysWithValues: contentGroup.assets.map { ($0.id, $0) })
+                    }
                 }
             }
 

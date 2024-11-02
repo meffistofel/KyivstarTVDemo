@@ -44,6 +44,9 @@
 		9DDDE2ED2CD5303000FCDF5E /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDDE2EC2CD5303000FCDF5E /* UIFont+Ext.swift */; };
 		9DDDECFA2CD6955000FCDF5E /* CustomUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDDECF92CD6955000FCDF5E /* CustomUILabel.swift */; };
 		9DDDED0A2CD6B8DB00FCDF5E /* LiveChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDDED092CD6B8DB00FCDF5E /* LiveChannelCell.swift */; };
+		9DDDED0F2CD6BE4B00FCDF5E /* GradientProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDDED0E2CD6BE4B00FCDF5E /* GradientProgressView.swift */; };
+		9DDDED112CD6C2A800FCDF5E /* EPGCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDDED102CD6C2A800FCDF5E /* EPGCell.swift */; };
+		9DDDED212CD6C53A00FCDF5E /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDDED202CD6C53A00FCDF5E /* String+Ext.swift */; };
 		AB5E7741261461B7004AA3B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5E7740261461B7004AA3B2 /* AppDelegate.swift */; };
 		AB5E7743261461B7004AA3B2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5E7742261461B7004AA3B2 /* SceneDelegate.swift */; };
 		AB5E774A261461B9004AA3B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB5E7749261461B9004AA3B2 /* Assets.xcassets */; };
@@ -88,6 +91,9 @@
 		9DDDE2EC2CD5303000FCDF5E /* UIFont+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Ext.swift"; sourceTree = "<group>"; };
 		9DDDECF92CD6955000FCDF5E /* CustomUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUILabel.swift; sourceTree = "<group>"; };
 		9DDDED092CD6B8DB00FCDF5E /* LiveChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveChannelCell.swift; sourceTree = "<group>"; };
+		9DDDED0E2CD6BE4B00FCDF5E /* GradientProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientProgressView.swift; sourceTree = "<group>"; };
+		9DDDED102CD6C2A800FCDF5E /* EPGCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPGCell.swift; sourceTree = "<group>"; };
+		9DDDED202CD6C53A00FCDF5E /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		AB5E773D261461B7004AA3B2 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5E7740261461B7004AA3B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB5E7742261461B7004AA3B2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -157,11 +163,10 @@
 		9D41A0432CD2A5E700D9B5DA /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				9DDDED0D2CD6BE3D00FCDF5E /* CustomUI */,
 				9DDDE0392CD3FEFC00FCDF5E /* UI */,
 				9D41A0442CD2A5F200D9B5DA /* JSONDecoder+Ext.swift */,
-				9D41A0572CD2AB7000D9B5DA /* NavBarAppearance+Ext.swift */,
-				9D41A07A2CD3D6B200D9B5DA /* UICollectionView+Ext.swift */,
-				9D41A0852CD3EE9B00D9B5DA /* UIView+Ext.swift */,
+				9DDDED202CD6C53A00FCDF5E /* String+Ext.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 				9DDDE19B2CD42CC700FCDF5E /* PagingSectionFooterView.swift */,
 				9DDDE2EA2CD52F5600FCDF5E /* HomeSectionHeaderView.swift */,
 				9DDDED092CD6B8DB00FCDF5E /* LiveChannelCell.swift */,
+				9DDDED102CD6C2A800FCDF5E /* EPGCell.swift */,
 			);
 			path = ChilViews;
 			sourceTree = "<group>";
@@ -234,12 +240,23 @@
 		9DDDE0392CD3FEFC00FCDF5E /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				9DDDE03A2CD3FF0900FCDF5E /* PreviewContainer.swift */,
+				9D41A0572CD2AB7000D9B5DA /* NavBarAppearance+Ext.swift */,
+				9D41A07A2CD3D6B200D9B5DA /* UICollectionView+Ext.swift */,
+				9D41A0852CD3EE9B00D9B5DA /* UIView+Ext.swift */,
 				9DDDE03C2CD4034400FCDF5E /* UIImageView+Async.swift */,
 				9DDDE2EC2CD5303000FCDF5E /* UIFont+Ext.swift */,
-				9DDDECF92CD6955000FCDF5E /* CustomUILabel.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		9DDDED0D2CD6BE3D00FCDF5E /* CustomUI */ = {
+			isa = PBXGroup;
+			children = (
+				9DDDECF92CD6955000FCDF5E /* CustomUILabel.swift */,
+				9DDDE03A2CD3FF0900FCDF5E /* PreviewContainer.swift */,
+				9DDDED0E2CD6BE4B00FCDF5E /* GradientProgressView.swift */,
+			);
+			path = CustomUI;
 			sourceTree = "<group>";
 		};
 		AB5E7734261461B7004AA3B2 = {
@@ -359,6 +376,7 @@
 				9DDDE03B2CD3FF0900FCDF5E /* PreviewContainer.swift in Sources */,
 				9DDDE03D2CD4034400FCDF5E /* UIImageView+Async.swift in Sources */,
 				9D41A0862CD3EE9B00D9B5DA /* UIView+Ext.swift in Sources */,
+				9DDDED0F2CD6BE4B00FCDF5E /* GradientProgressView.swift in Sources */,
 				9DDDECFA2CD6955000FCDF5E /* CustomUILabel.swift in Sources */,
 				9D41A0762CD3833C00D9B5DA /* AssetDetailModel.swift in Sources */,
 				9D41A04F2CD2A95F00D9B5DA /* Coordinator.swift in Sources */,
@@ -380,6 +398,7 @@
 				9DDDED0A2CD6B8DB00FCDF5E /* LiveChannelCell.swift in Sources */,
 				9D419FFD2CD29F4500D9B5DA /* HomeVMType.swift in Sources */,
 				9D41A05A2CD2AD4B00D9B5DA /* HomeVCFactory.swift in Sources */,
+				9DDDED212CD6C53A00FCDF5E /* String+Ext.swift in Sources */,
 				9D41A03E2CD2A4E700D9B5DA /* HTTP.swift in Sources */,
 				9D41A0792CD3D67200D9B5DA /* HomeCollectionView.swift in Sources */,
 				9DDDE2ED2CD5303000FCDF5E /* UIFont+Ext.swift in Sources */,
@@ -391,6 +410,7 @@
 				9D41A0562CD2AAE200D9B5DA /* HomeFlowCoordinator.swift in Sources */,
 				9D419FF82CD29EFD00D9B5DA /* HomeViewController.swift in Sources */,
 				9D41A03C2CD2A4D600D9B5DA /* APIError.swift in Sources */,
+				9DDDED112CD6C2A800FCDF5E /* EPGCell.swift in Sources */,
 				9D41A0822CD3E76300D9B5DA /* CategoryCell.swift in Sources */,
 				9D41A0842CD3EA2500D9B5DA /* SeriesCell.swift in Sources */,
 				9DDDE2EB2CD52F5600FCDF5E /* HomeSectionHeaderView.swift in Sources */,

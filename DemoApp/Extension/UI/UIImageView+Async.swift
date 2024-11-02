@@ -18,7 +18,6 @@ extension UIImageView {
             return
         }
         image = nil
-        showActivityIndicator(color: .black)
 
         if let imageFromCache = imageCache.object(forKey: urlString as AnyObject) as? UIImage {
             self.image = imageFromCache
@@ -27,6 +26,8 @@ extension UIImageView {
         }
 
         do {
+            showActivityIndicator(color: .black)
+            
             let (data, _) = try await URLSession.shared.data(from: url)
 
             self.hideActivityIndicatorView()
@@ -35,7 +36,7 @@ extension UIImageView {
                 imageCache.setObject(imageToCache, forKey: urlString as AnyObject)
                 self.image = imageToCache
             } else {
-                self.image = UIImage(systemName: "people")
+                self.image = UIImage(systemName: "questionmark.circle.fill")
             }
         } catch  {
             print(error)

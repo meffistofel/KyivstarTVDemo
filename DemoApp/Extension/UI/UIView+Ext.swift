@@ -8,6 +8,13 @@
 import UIKit
 
 extension UIView {
+    func border(color: UIColor) {
+        layer.borderColor = color.cgColor
+        layer.borderWidth = 1
+    }
+}
+
+extension UIView {
     struct AnchorModel<AnchorType> {
         let anchor: AnchorType
         let padding: CGFloat

@@ -10,12 +10,16 @@ import Combine
 
 class HomeCollectionView: UICollectionView {
 
-    private(set) var pagingInfoSubject: PassthroughSubject<PagingInfo, Never>
+    private(set) var onGetSection: (Int) -> Section?
+    private(set) var onChangePagerPage: (PagingInfo) -> Void
 
-    init(pagingInfoSubject: PassthroughSubject<PagingInfo, Never>) {
-        self.pagingInfoSubject = pagingInfoSubject
+    init(onChangePagerPage: @escaping (PagingInfo) -> Void, onGetSection: @escaping (Int) -> Section?) {
+        self.onGetSection = onGetSection
+        self.onChangePagerPage = onChangePagerPage
 
         super.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+
+        contentInset = .init(top: 8, left: 0, bottom: 8, right: 0)
         setCollectionViewLayout(createLayout(), animated: false)
     }
 
@@ -29,21 +33,31 @@ class HomeCollectionView: UICollectionView {
         config.interSectionSpacing = 32
 
         let layout = UICollectionViewCompositionalLayout(
-            sectionProvider: { [unowned self] sectionIndex, layoutEnvironment in
-                let sectionType = Section.allCases[sectionIndex]
+            sectionProvider: {
+                [unowned self] sectionIndex,
+                layoutEnvironment in
+                guard let section = onGetSection(sectionIndex) else {
+                    return nil
+                }
                 let contentSize = layoutEnvironment.container.contentSize
-
-                return switch sectionType {
+                let sectionPadding: CGFloat = 24
+                
+                return switch section {
                 case .categories:
-                        .categorySectionLayout(size: contentSize, sectionIndex: sectionIndex)
+                        .categoriesLayout(contentSize: contentSize, sectionPadding: sectionPadding)
                 case .promotions:
-                        .promotionSectionLayout(size: contentSize, sectionIndex: sectionIndex, pagingInfoSubject: pagingInfoSubject)
+                        .promotionsLayout(
+                            contentSize: contentSize,
+                            sectionPadding: sectionPadding,
+                            sectionIndex: sectionIndex,
+                            onChangePagerPage: onChangePagerPage
+                        )
                 case .series:
-                        .seriesSectionLayout(size: contentSize, sectionIndex: sectionIndex)
+                        .seriesLayout(contentSize: contentSize, sectionPadding: sectionPadding)
                 case .liveChannel:
-                        .liveChanelSectionLayout(size: contentSize, sectionIndex: sectionIndex)
+                        .liveChannelsLayout(contentSize: contentSize, sectionPadding: sectionPadding)
                 case .epg:
-                        .categorySectionLayout(size: contentSize, sectionIndex: sectionIndex)
+                        .epgLayout(sectionPadding: sectionPadding)
                 }
             },
             configuration: config
@@ -57,91 +71,119 @@ class HomeCollectionView: UICollectionView {
 
 private extension NSCollectionLayoutSection {
 
-    static func promotionSectionLayout(size: CGSize, sectionIndex: Int, pagingInfoSubject: PassthroughSubject<PagingInfo, Never>) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1.0))
+    static func epgLayout(sectionPadding: CGFloat) -> NSCollectionLayoutSection {
+        .sectionLayout(
+            itemWidthDimensio: .fractionalWidth(1),
+            itemHeightDimensio: .fractionalHeight(1),
+            groupWidthDimensio: .fractionalWidth(0.576),
+            groupHeightDimensio: .estimated(168),
+            sectionPadding: sectionPadding
+        )
+    }
+
+    static func liveChannelsLayout(contentSize: CGSize, sectionPadding: CGFloat) -> NSCollectionLayoutSection {
+        let groupWidth = (contentSize.width - sectionPadding * 2)
+        let groupHeight = groupWidth / 3
+
+        return .sectionLayout(
+            itemWidthDimensio: .fractionalWidth(1/3),
+            itemHeightDimensio: .fractionalHeight(1),
+            groupWidthDimensio: .absolute(groupWidth),
+            groupHeightDimensio: .absolute(groupHeight),
+            sectionPadding: sectionPadding
+        )
+    }
+
+    static func seriesLayout(contentSize: CGSize, sectionPadding: CGFloat) -> NSCollectionLayoutSection {
+        let groupWidth = (contentSize.width - sectionPadding * 2)
+
+        return .sectionLayout(
+            itemWidthDimensio: .fractionalWidth(1/3),
+            itemHeightDimensio: .fractionalWidth(1),
+            groupWidthDimensio: .absolute(groupWidth),
+            groupHeightDimensio: .fractionalWidth(104/200),
+            sectionPadding: sectionPadding
+        )
+    }
+
+    static func promotionsLayout(
+        contentSize: CGSize,
+        sectionPadding: CGFloat,
+        sectionIndex: Int?,
+        onChangePagerPage: @escaping (PagingInfo) -> Void
+    ) -> NSCollectionLayoutSection {
+         .sectionLayout(
+            itemWidthDimensio: .fractionalWidth(1),
+            itemHeightDimensio: .fractionalHeight(1),
+            groupWidthDimensio: .absolute(contentSize.width - sectionPadding * 2),
+            groupHeightDimensio: .fractionalWidth(180/328),
+            interItemSpacing: 0,
+            interGroupSpacing: 24,
+            sectionPadding: sectionPadding,
+            sectionIndex: sectionIndex,
+            isNeedPager: true,
+            isNeedHeader: false,
+            scrollingBehavior: .groupPagingCentered,
+            onChangePagerPage: onChangePagerPage
+        )
+    }
+
+    static func categoriesLayout(contentSize: CGSize, sectionPadding: CGFloat) -> NSCollectionLayoutSection {
+        let groupWidth = (contentSize.width - sectionPadding * 2)
+        let groupHeight = groupWidth / 3
+
+        return .sectionLayout(
+            itemWidthDimensio: .fractionalWidth(1/3),
+            itemHeightDimensio: .fractionalHeight(1),
+            groupWidthDimensio: .absolute(groupWidth),
+            groupHeightDimensio: .absolute(groupHeight + 16),
+            sectionPadding: sectionPadding
+        )
+    }
+
+    static func sectionLayout(
+        itemWidthDimensio: NSCollectionLayoutDimension,
+        itemHeightDimensio: NSCollectionLayoutDimension,
+        groupWidthDimensio: NSCollectionLayoutDimension,
+        groupHeightDimensio: NSCollectionLayoutDimension,
+        interItemSpacing: CGFloat = 8,
+        interGroupSpacing: CGFloat = 8,
+        sectionPadding: CGFloat,
+        sectionIndex: Int? = nil,
+        isNeedPager: Bool = false,
+        isNeedHeader: Bool = true,
+        scrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuousGroupLeadingBoundary,
+        onChangePagerPage: ((PagingInfo) -> Void)? = nil
+    ) -> NSCollectionLayoutSection {
+        let sectionContentInsets: NSDirectionalEdgeInsets = .init(top: 0, leading: sectionPadding, bottom: 0, trailing: sectionPadding)
+
+        let itemSize = NSCollectionLayoutSize(widthDimension: itemWidthDimensio, heightDimension: itemHeightDimensio)
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let interGroupSpacing: CGFloat = 24
-        let groupSpacing = interGroupSpacing * 2
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(size.width - groupSpacing), heightDimension: .fractionalWidth(180/328))
+        let groupSize = NSCollectionLayoutSize(widthDimension: groupWidthDimensio, heightDimension: groupHeightDimensio)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.interItemSpacing = .fixed(interItemSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.orthogonalScrollingBehavior = scrollingBehavior
         section.interGroupSpacing = interGroupSpacing
+        section.contentInsets = sectionContentInsets
 
-        addPager(to: section)
+        if isNeedPager, let sectionIndex {
+            addPager(to: section)
 
-        section.visibleItemsInvalidationHandler = { _, offset, environment in
-            let pageWidth = environment.container.contentSize.width - groupSpacing + interGroupSpacing
+            section.visibleItemsInvalidationHandler = { _, offset, environment in
+                let pageWidth = environment.container.contentSize.width - sectionPadding * 2 + sectionPadding
 
-            let page = Int((offset.x / pageWidth).rounded())
-
-            pagingInfoSubject.send(PagingInfo(sectionIndex: sectionIndex, currentPage: Int(page)))
+                let page = Int((offset.x / pageWidth).rounded())
+                let pagingInfo = PagingInfo(sectionIndex: sectionIndex, currentPage: Int(page))
+                onChangePagerPage?(pagingInfo)
+            }
         }
 
-        return section
-    }
-
-    static func categorySectionLayout(size: CGSize, sectionIndex: Int) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let sectionPadding: CGFloat = 24
-
-        let groupWidth = (size.width - sectionPadding * 2)
-        let groupHeight = groupWidth / 3
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(groupWidth), heightDimension: .absolute(groupHeight + 16))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.interItemSpacing = .fixed(8)
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        section.interGroupSpacing = 8
-        section.contentInsets = .init(top: 0, leading: sectionPadding, bottom: 0, trailing: sectionPadding)
-
-        addHeader(to: section)
-
-        return section
-    }
-
-    static func seriesSectionLayout(size: CGSize, sectionIndex: Int) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .estimated(200))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let sectionPadding: CGFloat = 24
-
-        let groupWidth = (size.width - sectionPadding * 2)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(groupWidth), heightDimension: .estimated(200))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.interItemSpacing = .fixed(8)
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        section.interGroupSpacing = 8
-        section.contentInsets = .init(top: 0, leading: sectionPadding, bottom: 0, trailing: sectionPadding)
-
-        addHeader(to: section)
-
-        return section
-    }
-
-    static func liveChanelSectionLayout(size: CGSize, sectionIndex: Int) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let sectionPadding: CGFloat = 24
-
-        let groupWidth = (size.width - sectionPadding * 2)
-        let groupHeight = groupWidth / 3
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(groupWidth), heightDimension: .absolute(groupHeight))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.interItemSpacing = .fixed(8)
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        section.interGroupSpacing = 8
-        section.contentInsets = .init(top: 0, leading: sectionPadding, bottom: 0, trailing: sectionPadding)
-
-        addHeader(to: section)
+        if isNeedHeader {
+            addHeader(to: section)
+        }
 
         return section
     }
