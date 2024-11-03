@@ -9,11 +9,10 @@ import SwiftUI
 
 @MainActor
 final class AssetDetailVCFactory {
-    func build(coordinator: Coordinator) -> UIHostingController<AssetDetailView> {
-        let viewModel = AssetDetailVM()
-        viewModel.coordinatorDelegate = coordinator as? AssetDetailVMCoordinatorDelegate
+    func build(asset: Asset, coordinator: Coordinator) -> UIHostingController<AssetDetailView> {
+        let view = AssetDetailView(asset: asset, coordinatorDelegate: coordinator)
 
-        let viewController = UIHostingController(rootView: AssetDetailView(viewModel: viewModel))
+        let viewController = UIHostingController(rootView: view)
 
         return viewController
     }
