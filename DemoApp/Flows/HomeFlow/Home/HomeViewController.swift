@@ -85,17 +85,20 @@ extension HomeViewController: UICollectionViewDelegate {
                 return
             }
         case .series:
-            guard case let .promotions(id) = dataSource.itemIdentifier(for: indexPath) else {
+            guard case let .series(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
+            viewModel.send(input: .showAssetDetail(sectionId, id))
         case .liveChannel:
-            guard case let .promotions(id) = dataSource.itemIdentifier(for: indexPath) else {
+            guard case let .liveChannel(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
+            viewModel.send(input: .showAssetDetail(sectionId, id))
         case .epg:
-            guard case let .promotions(id) = dataSource.itemIdentifier(for: indexPath) else {
+            guard case let .epg(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
+            viewModel.send(input: .showAssetDetail(sectionId, id))
         }
     }
 }

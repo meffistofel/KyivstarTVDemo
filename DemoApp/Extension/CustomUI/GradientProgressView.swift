@@ -30,7 +30,7 @@ final class GradientProgressView: UIView {
     }
 
     private func setupViews() {
-        backgroundView.backgroundColor = UIColor(resource: .app2B3037)
+        backgroundView.backgroundColor = .app2B3037
         backgroundView.clipsToBounds = true
         addSubview(backgroundView)
 

@@ -22,14 +22,14 @@ final class HomeSectionHeaderView: UICollectionReusableView, ReusableView {
     private lazy var titleLabel: UILabel = {
         let label: UILabel = UILabel()
         label.font = .sfProRounded(.regular, size: 16)
-        label.textColor = UIColor(resource: .app1E2228)
+        label.textColor = .app1E2228
 
         return label
     }()
 
     private lazy var deleteButton: UIButton = {
         let button: UIButton = UIButton()
-        button.setTitleColor(UIColor(resource: .app0063C6), for: .normal)
+        button.setTitleColor(.app0063C6, for: .normal)
         button.titleLabel?.font = .sfProRounded(.regular, size: 16)
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
 

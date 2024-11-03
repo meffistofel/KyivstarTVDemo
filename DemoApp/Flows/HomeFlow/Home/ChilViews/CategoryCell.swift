@@ -14,7 +14,7 @@ final class CategoryCell: UICollectionViewCell, ReusableView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .sfProRounded(.bold, size: 12)
-        label.textColor = UIColor(resource: .app1E2228)
+        label.textColor = .app1E2228
         label.textAlignment = .left
 
         return label

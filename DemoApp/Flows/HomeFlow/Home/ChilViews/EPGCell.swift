@@ -20,7 +20,7 @@ final class EPGCell: UICollectionViewCell, ReusableView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .sfProRounded(.bold, size: 12)
-        label.textColor = UIColor(resource: .app1E2228)
+        label.textColor = .app1E2228
         label.textAlignment = .left
 
         return label
@@ -29,7 +29,7 @@ final class EPGCell: UICollectionViewCell, ReusableView {
     private lazy var subTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .sfProRounded(.medium, size: 11)
-        label.textColor = UIColor(resource: .app808890)
+        label.textColor = .app808890
         label.textAlignment = .left
 
         return label
