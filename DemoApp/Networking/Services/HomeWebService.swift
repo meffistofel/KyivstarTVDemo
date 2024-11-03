@@ -11,7 +11,7 @@ protocol HomeWebServiceProtocol {
     func getContentGroups() async throws -> [ContentGroupModel]
     func getPromotions() async throws -> PromotionalModel
     func getCategories() async throws -> CategoryModel
-    func getAssetDetails() async throws -> AssetDetailModel
+    func getAssetDetails(id: String) async throws -> AssetDetailModel
 }
 
 final class HomeWebService: HomeWebServiceProtocol {
@@ -40,7 +40,7 @@ final class HomeWebService: HomeWebServiceProtocol {
         )
     }
 
-    func getAssetDetails() async throws -> AssetDetailModel {
+    func getAssetDetails(id: String) async throws -> AssetDetailModel {
         try await networkService.call(
             Resource(route: "/templates/04Pl5AYhO6-n/data")
         )

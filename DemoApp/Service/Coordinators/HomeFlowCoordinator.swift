@@ -51,13 +51,19 @@ final class HomeFlowCoordinator: Coordinator {
 
 extension HomeFlowCoordinator: HomeVMCoordinatorDelegate {
     @MainActor
-    func pushAssetDetailView(with asset: Asset) {
-        let vc = AssetDetailVCFactory().build(asset: asset, coordinator: self)
+    func pushAssetDetailView(with assetId: String) {
+        let vc = AssetDetailVCFactory().build(assetId: assetId, coordinator: self)
 
         rootViewController.pushViewController(vc, animated: true)
     }
 }
 
-extension HomeFlowCoordinator: AssetDetailView.CoordinatorDelegate {
+extension HomeFlowCoordinator: AssetDetailVMCoordinatorDelegate {
 
+}
+
+extension HomeFlowCoordinator {
+    static var mock: HomeFlowCoordinator {
+        HomeFlowCoordinator(window: nil, container: .init())
+    }
 }

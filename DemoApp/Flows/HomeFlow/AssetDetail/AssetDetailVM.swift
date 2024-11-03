@@ -6,23 +6,33 @@
 //
 
 import Foundation
+import OSLog
 
-extension AssetDetailView {
-    final class AssetDetailVM: ObservableObject {
+private let logger = Logger(subsystem: "DemoApp", category: "HomeVM")
 
-        @Published private(set) var asset: Asset
+final class AssetDetailVM: ObservableObject {
 
-        weak var coordinatorDelegate: (any CoordinatorDelegate)?
+    @Published private(set) var asset: AssetDetailModel?
 
-        init(asset: Asset, coordinatorDelegate: Coordinator) {
-            self.asset = asset
-            self.coordinatorDelegate = coordinatorDelegate as? CoordinatorDelegate
-        }
+    weak private var coordinatorDelegate: (any AssetDetailVMCoordinatorDelegate)?
+
+    var loadingIsCompleted: Bool {
+        asset != nil
     }
-}
 
-extension AssetDetailView {
-    protocol CoordinatorDelegate: AnyObject {
+    init(
+        assetId: String,
+        coordinatorDelegate: AssetDetailVMCoordinatorDelegate?,
+        homeWebService: any HomeWebServiceProtocol
+    ) {
+        self.coordinatorDelegate = coordinatorDelegate
 
+        Task { @MainActor in
+            do {
+                asset = try await homeWebService.getAssetDetails(id: assetId)
+            } catch  {
+                logger.error("\(error)")
+            }
+        }
     }
 }

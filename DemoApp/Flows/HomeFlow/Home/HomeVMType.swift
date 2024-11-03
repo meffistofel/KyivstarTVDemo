@@ -9,9 +9,9 @@ import Foundation
 import Combine
 
 protocol HomeVMProtocol {
-    var outputStream: AsyncStreamResult<HomeVMOutput> { get }
-    
-    func send(input: HomeVMInput)
+    var outputStream: AsyncStreamResult<HomeVM.Output> { get }
+
+    func send(input: HomeVM.Input)
 
     func getPromotion(id: Promotion.ID) -> Promotion?
     func getCategory(id: Category.ID) -> Category?
@@ -22,19 +22,7 @@ protocol HomeVMProtocol {
 // MARK: Coordinator Delegate
 protocol HomeVMCoordinatorDelegate: AnyObject {
     @MainActor
-    func pushAssetDetailView(with asset: Asset)
-}
-
-enum HomeVMInput {
-    case appear
-    case fetchResource
-    case showAssetDetail(Section, Asset.ID)
-}
-
-enum HomeVMOutput {
-    case idle
-    case error(Error)
-    case fetchedResource([SectionData])
+    func pushAssetDetailView(with assetId: String)
 }
 
 enum Section: Int, CaseIterable {
@@ -51,11 +39,6 @@ enum SectionItem: Hashable {
     case series(Asset.ID)
     case promotions(Promotion.ID)
     case categories(Category.ID)
-}
-
-enum SupplementaryType: String {
-    case pager
-    case header
 }
 
 struct SectionData {

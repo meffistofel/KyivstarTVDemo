@@ -43,15 +43,11 @@ extension UINavigationBarAppearance {
             .font: UIFont.systemFont(ofSize: 24, weight: .semibold)
         ]
 
-        let barButtonItemAppearance = UIBarButtonItemAppearance(style: .plain)
-        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: buttonColor]
-        barButtonItemAppearance.disabled.titleTextAttributes = [.foregroundColor: UIColor.gray]
-        barButtonItemAppearance.highlighted.titleTextAttributes = [.foregroundColor: UIColor.label]
-        barButtonItemAppearance.focused.titleTextAttributes = [.foregroundColor: buttonColor]
 
-        customNavBarAppearance.buttonAppearance = barButtonItemAppearance
-        customNavBarAppearance.backButtonAppearance = barButtonItemAppearance
-        customNavBarAppearance.doneButtonAppearance = barButtonItemAppearance
+        let backImage = UIImage.backButtonIcon.withTintColor(.app1E2228, renderingMode: .alwaysOriginal)
+
+        customNavBarAppearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage)
+        customNavBarAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.clear]
 
         UINavigationBar.appearance().scrollEdgeAppearance = customNavBarAppearance
         UINavigationBar.appearance().compactAppearance = customNavBarAppearance
