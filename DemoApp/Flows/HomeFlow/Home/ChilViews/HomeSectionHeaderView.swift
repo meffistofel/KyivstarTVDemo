@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class HomeSectionHeaderView: UICollectionReusableView, ReusableView {
+final class HomeSectionHeaderView: UICollectionReusableView, ReusableView {
 
     var onTapDelete: (() -> Void)?
 

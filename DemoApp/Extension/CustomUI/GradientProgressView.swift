@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GradientProgressView: UIView {
+final class GradientProgressView: UIView {
 
     private let backgroundView = UIView()
     private let gradientView = UIView()

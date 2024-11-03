@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LiveChannelCell: UICollectionViewCell, ReusableView {
+final class LiveChannelCell: UICollectionViewCell, ReusableView {
 
     private var task: Task<Void, Never>?
 
@@ -62,7 +62,11 @@ class LiveChannelCell: UICollectionViewCell, ReusableView {
         }
 
         task = Task {
-            await posterImageView.loadRemoteImageFrom(urlString: model.imageURL)
+            do {
+                try await posterImageView.loadRemoteImageFrom(urlString: model.imageURL)
+            } catch  {
+                print(error)
+            }
         }
     }
 }

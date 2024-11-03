@@ -8,8 +8,6 @@
 import OSLog
 import Foundation
 
-typealias AsyncStreamResult<T> = (stream: AsyncStream<T>, continuation: AsyncStream<T>.Continuation)
-
 private let logger = Logger(subsystem: "DemoApp", category: "HomeVM")
 
 final class HomeVM: HomeVMProtocol {
@@ -97,9 +95,6 @@ private extension HomeVM {
             switch event {
             case .appear:
                 print("Handling appear event")
-                send(output: .idle)
-            case .cancel:
-                print("Handling cancel event")
                 send(output: .idle)
             case .fetchResource:
                 print("Handling fetchResource event")

@@ -13,7 +13,7 @@ private let logger = Logger(subsystem: "DemoApp", category: "NetworkMonitoringSe
 
 // MARK: - NetworkMonitoringService
 
-class NetworkMonitoringService {
+final class NetworkMonitoringService {
 
     var isNetworkAvailable = CurrentValueSubject<Bool, Never>(true)
 

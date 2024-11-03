@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DependencyContainer {
+final class DependencyContainer {
     lazy var networkingMonitoringService: NetworkMonitoringService = NetworkMonitoringService()
     lazy var networkingService: NetworkServiceProtocol = NetworkingService(networkMonitoringService: networkingMonitoringService)
 

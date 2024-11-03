@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AppCoordinator: Coordinator {
+final class AppCoordinator: Coordinator {
 
     // MARK: - Properties
     let window: UIWindow?

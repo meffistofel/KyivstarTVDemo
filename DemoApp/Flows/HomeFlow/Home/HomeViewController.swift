@@ -11,28 +11,32 @@ import Combine
 
 private let logger = Logger(subsystem: "DemoApp", category: "HomeViewController")
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
 
     var viewModel: HomeVMProtocol!
 
-    private var collectionView: HomeCollectionView!
+    private var collectionView: UICollectionView!
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>!
     private let pagingInfoSubject = PassthroughSubject<PagingInfo, Never>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView = HomeCollectionView(
-            onChangePagerPage: { [weak self] pageInfo in
-                self?.pagingInfoSubject.send(pageInfo)
-            },
-            onGetSection: { [weak self] sectionIndex in
-                self?.dataSource.sectionIdentifier(for: sectionIndex)
-            }
+        collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: .homeViewLayout(
+                onChangePagerPage: { [weak self] pageInfo in
+                    self?.pagingInfoSubject.send(pageInfo)
+                },
+                onGetSection: { [weak self] sectionIndex in
+                    self?.dataSource.sectionIdentifier(for: sectionIndex)
+                }
+            )
         )
         dataSource = setupDataSource()
 
         bindOutput()
+        viewModel.send(input: .appear)
         viewModel.send(input: .fetchResource)
 
         configureCollectionView()
@@ -110,9 +114,9 @@ private extension HomeViewController {
     func render(_ state: HomeVMOutput) {
         switch state {
         case .idle:
-            print("Idle")
+            logger.debug("Idle")
         case .fetchedResource(let sources):
-            dataSource.reload(sources)
+            reload(sources)
             logger.debug("Fetched source and reload has been success")
         case .error(let error):
             logger.error("\(error.localizedDescription)")
@@ -121,7 +125,7 @@ private extension HomeViewController {
 }
 
 
-extension HomeViewController {
+private extension HomeViewController {
     func setupDataSource() -> UICollectionViewDiffableDataSource<Section, SectionItem> {
         UICollectionViewDiffableDataSource(collectionView: collectionView) { [unowned self] collectionView, indexPath, itemIdentifier in
             guard let section = dataSource.sectionIdentifier(for: indexPath.section) else {
@@ -196,11 +200,35 @@ extension HomeViewController {
             header.config(with: sectionTitle)
 
             header.onTapDelete = { [weak self] in
-                self?.dataSource.removeSection(section)
+                self?.removeSection(section)
             }
 
             return header
         }
+    }
+
+    func reload(_ data: [SectionData], animated: Bool = false) {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+
+        for item in data {
+            snapshot.appendSections([item.key])
+            snapshot.appendItems(item.values, toSection: item.key)
+        }
+        dataSource.apply(snapshot, animatingDifferences: animated)
+    }
+
+
+    func removeSection(_ section: Section) {
+        // Отримуємо поточний знімок
+        var snapshot = dataSource.snapshot()
+
+        // Видаляємо секцію
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: section))
+        snapshot.deleteSections([section])
+
+        // Застосовуємо оновлений знімок
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 

@@ -13,7 +13,7 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 extension UIImageView {
 
     @MainActor
-    func loadRemoteImageFrom(urlString: String) async {
+    func loadRemoteImageFrom(urlString: String) async throws {
         guard let url = URL(string: urlString) else {
             return
         }
@@ -25,21 +25,21 @@ extension UIImageView {
             return
         }
 
-        do {
-            showActivityIndicator(color: .black)
-            
-            let (data, _) = try await URLSession.shared.data(from: url)
+        showActivityIndicator(color: .black)
 
-            self.hideActivityIndicatorView()
+        guard !Task.isCancelled else {
+            return
+        }
 
-            if let imageToCache = UIImage(data: data) {
-                imageCache.setObject(imageToCache, forKey: urlString as AnyObject)
-                self.image = imageToCache
-            } else {
-                self.image = UIImage(systemName: "questionmark.circle.fill")
-            }
-        } catch  {
-            print(error)
+        let (data, _) = try await URLSession.shared.data(from: url)
+
+        self.hideActivityIndicatorView()
+
+        if let imageToCache = UIImage(data: data) {
+            imageCache.setObject(imageToCache, forKey: urlString as AnyObject)
+            self.image = imageToCache
+        } else {
+            self.image = UIImage(systemName: "questionmark.circle.fill")
         }
     }
 }

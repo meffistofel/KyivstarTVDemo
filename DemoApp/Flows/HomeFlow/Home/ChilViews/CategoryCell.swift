@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CategoryCell: UICollectionViewCell, ReusableView {
+final class CategoryCell: UICollectionViewCell, ReusableView {
 
     private var task: Task<Void, Never>?
 
@@ -28,7 +28,7 @@ class CategoryCell: UICollectionViewCell, ReusableView {
         return sv
     }()
 
-    private let imageView: UIImageView = {
+    private let posterImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
 
@@ -46,7 +46,7 @@ class CategoryCell: UICollectionViewCell, ReusableView {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageView.image = nil
+        posterImageView.image = nil
         task?.cancel()
         task = nil
     }
@@ -58,16 +58,20 @@ extension CategoryCell {
         titleLabel.textAlignment = .center
 
         task = Task {
-            await imageView.loadRemoteImageFrom(urlString: model.imageURL)
+            do {
+                try await posterImageView.loadRemoteImageFrom(urlString: model.imageURL)
+            } catch  {
+                print(error)
+            }
         }
     }
 
     private func setupUI() {
         contentView.backgroundColor = .clear
-        imageView.layer.cornerRadius = 12
-        imageView.layer.masksToBounds = true
+        posterImageView.layer.cornerRadius = 12
+        posterImageView.layer.masksToBounds = true
 
-        vStack.addArrangedSubview(imageView)
+        vStack.addArrangedSubview(posterImageView)
         vStack.addArrangedSubview(titleLabel)
 
         contentView.addSubview(vStack)

@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-class PromotionCell: UICollectionViewCell, ReusableView {
+final class PromotionCell: UICollectionViewCell, ReusableView {
 
-    private let imageView = UIImageView()
+    private let posterImageView = UIImageView()
     private let pageControl = UIPageControl()
 
     private var task: Task<Void, Never>?
@@ -25,7 +25,7 @@ class PromotionCell: UICollectionViewCell, ReusableView {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageView.image = nil
+        posterImageView.image = nil
         task?.cancel()
         task = nil
     }
@@ -34,7 +34,11 @@ class PromotionCell: UICollectionViewCell, ReusableView {
 extension PromotionCell {
     func configure(with model: CellModel) {
         task = Task {
-            await imageView.loadRemoteImageFrom(urlString: model.imageURL)
+            do {
+                try await posterImageView.loadRemoteImageFrom(urlString: model.imageURL)
+            } catch  {
+                print(error)
+            }
         }
     }
 
@@ -44,10 +48,10 @@ extension PromotionCell {
         contentView.layer.masksToBounds = true
 
 
-        contentView.addSubview(imageView)
+        contentView.addSubview(posterImageView)
         contentView.addSubview(pageControl)
 
-        imageView.equalToSuperview()
+        posterImageView.equalToSuperview()
         pageControl.anchor(
             leading: .init(anchor: contentView.leadingAnchor, padding: 16),
             bottom: .init(anchor: contentView.bottomAnchor, padding: 16),
