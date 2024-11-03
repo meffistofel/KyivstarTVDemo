@@ -22,7 +22,6 @@ extension UINavigationBarAppearance {
     ) {
         let customNavBarAppearance = UINavigationBarAppearance()
 
-        // change type nav bar
         switch type {
         case .defaultAppear:
             customNavBarAppearance.configureWithDefaultBackground()
@@ -35,7 +34,6 @@ extension UINavigationBarAppearance {
             customNavBarAppearance.configureWithTransparentBackground()
         }
 
-        // Apply white colored normal and large titles.
         customNavBarAppearance.titleTextAttributes = [
             .foregroundColor: titleColor,
             .font: UIFont.systemFont(ofSize: 17, weight: .semibold)
@@ -44,7 +42,7 @@ extension UINavigationBarAppearance {
             .foregroundColor: largeTitleColor,
             .font: UIFont.systemFont(ofSize: 24, weight: .semibold)
         ]
-        // Apply white color to all the nav bar buttons.
+
         let barButtonItemAppearance = UIBarButtonItemAppearance(style: .plain)
         barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: buttonColor]
         barButtonItemAppearance.disabled.titleTextAttributes = [.foregroundColor: UIColor.gray]
@@ -54,8 +52,6 @@ extension UINavigationBarAppearance {
         customNavBarAppearance.buttonAppearance = barButtonItemAppearance
         customNavBarAppearance.backButtonAppearance = barButtonItemAppearance
         customNavBarAppearance.doneButtonAppearance = barButtonItemAppearance
-
-//        UINavigationBar.appearance().tintColor = .black
 
         UINavigationBar.appearance().scrollEdgeAppearance = customNavBarAppearance
         UINavigationBar.appearance().compactAppearance = customNavBarAppearance

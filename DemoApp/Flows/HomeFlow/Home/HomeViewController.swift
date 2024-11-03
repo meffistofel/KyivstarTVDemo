@@ -220,14 +220,11 @@ private extension HomeViewController {
 
 
     func removeSection(_ section: Section) {
-        // Отримуємо поточний знімок
         var snapshot = dataSource.snapshot()
 
-        // Видаляємо секцію
         snapshot.deleteItems(snapshot.itemIdentifiers(inSection: section))
         snapshot.deleteSections([section])
 
-        // Застосовуємо оновлений знімок
         dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
