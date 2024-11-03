@@ -12,11 +12,11 @@ private let logger = Logger(subsystem: "DemoApp", category: "HomeVM")
 
 final class HomeVM: HomeVMProtocol {
 
-    let outputStream: AsyncStreamResult<HomeVMOutput>
-    private let inputStream: AsyncStreamResult<HomeVMInput>
+    let outputStream: AsyncStreamResult<Output>
+    private let inputStream: AsyncStreamResult<Input>
 
     weak var coordinatorDelegate: (any HomeVMCoordinatorDelegate)?
-    private let HomeWebService: any HomeWebServiceProtocol
+    private let homeWebService: any HomeWebServiceProtocol
 
     private var seriesChannels: [Asset.ID: Asset] = [:]
     private var liveChannels: [Asset.ID: Asset] = [:]
@@ -25,12 +25,12 @@ final class HomeVM: HomeVMProtocol {
     private var promotions: [Promotion.ID: Promotion] = [:]
     private var sectionTitles: [Section: String] = [:]
 
-    init(coordinatorDelegate: (any HomeVMCoordinatorDelegate)? = nil, HomeWebService: any HomeWebServiceProtocol) {
+    init(coordinatorDelegate: (any HomeVMCoordinatorDelegate)? = nil, homeWebService: any HomeWebServiceProtocol) {
         self.coordinatorDelegate = coordinatorDelegate
-        self.HomeWebService = HomeWebService
+        self.homeWebService = homeWebService
 
-        inputStream = AsyncStream.makeStream(of: HomeVMInput.self)
-        outputStream = AsyncStream.makeStream(of: HomeVMOutput.self)
+        inputStream = AsyncStream.makeStream(of: Input.self)
+        outputStream = AsyncStream.makeStream(of: Output.self)
 
         subscribeToTerminationStreams()
 
@@ -44,7 +44,7 @@ final class HomeVM: HomeVMProtocol {
 // MARK: HomeVMProtocol methods
 extension HomeVM {
 
-    func send(input: HomeVMInput) {
+    func send(input: Input) {
         inputStream.continuation.yield(input)
     }
 
@@ -76,7 +76,7 @@ extension HomeVM {
 // MARK: Input / Output
 private extension HomeVM {
 
-    func send(output: HomeVMOutput) {
+    func send(output: Output) {
         outputStream.continuation.yield(output)
     }
 
@@ -101,10 +101,11 @@ private extension HomeVM {
                 let output = await prepareDataSource()
                 send(output: output)
             case let .showAssetDetail(section, id):
-                guard let asset = getContentGroup(section: section, id: id) else {
+                guard let asset = getContentGroup(section: section, id: id), asset.purchased else {
                     return
                 }
-                await coordinatorDelegate?.pushAssetDetailView(with: asset)
+
+                await coordinatorDelegate?.pushAssetDetailView(with: asset.id)
             }
         }
     }
@@ -112,11 +113,11 @@ private extension HomeVM {
 
 
 private extension HomeVM {
-    func prepareDataSource() async -> HomeVMOutput {
+    func prepareDataSource() async -> Output {
         do {
-            async let groupsRequest = HomeWebService.getContentGroups()
-            async let promotionsRequest = HomeWebService.getPromotions()
-            async let categoriesRequest = HomeWebService.getCategories()
+            async let groupsRequest = homeWebService.getContentGroups()
+            async let promotionsRequest = homeWebService.getPromotions()
+            async let categoriesRequest = homeWebService.getCategories()
 
             let (fetchedGroups, fetchedPromotions, fetchedCategories) = try await (groupsRequest, promotionsRequest, categoriesRequest)
 
@@ -168,6 +169,20 @@ private extension HomeVM {
         } catch {
             return .error(error)
         }
+    }
+}
+
+extension HomeVM {
+    enum Input {
+        case appear
+        case fetchResource
+        case showAssetDetail(Section, Asset.ID)
+    }
+
+    enum Output {
+        case idle
+        case error(Error)
+        case fetchedResource([SectionData])
     }
 }
 

@@ -114,7 +114,7 @@ private extension HomeViewController {
         }
     }
 
-    func render(_ state: HomeVMOutput) {
+    func render(_ state: HomeVM.Output) {
         switch state {
         case .idle:
             logger.debug("Idle")
@@ -229,6 +229,13 @@ private extension HomeViewController {
         snapshot.deleteSections([section])
 
         dataSource.apply(snapshot, animatingDifferences: true)
+    }
+}
+
+extension HomeViewController {
+    enum SupplementaryType: String {
+        case pager
+        case header
     }
 }
 

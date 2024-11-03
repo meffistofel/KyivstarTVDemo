@@ -9,8 +9,13 @@ import SwiftUI
 
 @MainActor
 final class AssetDetailVCFactory {
-    func build(asset: Asset, coordinator: Coordinator) -> UIHostingController<AssetDetailView> {
-        let view = AssetDetailView(asset: asset, coordinatorDelegate: coordinator)
+    func build(assetId: String, coordinator: Coordinator) -> UIHostingController<AssetDetailView> {
+        let viewModel = AssetDetailVM(
+            assetId: assetId,
+            coordinatorDelegate: coordinator as? AssetDetailVMCoordinatorDelegate,
+            homeWebService: coordinator.container.homeWebService
+        )
+        let view = AssetDetailView(viewModel: viewModel)
 
         let viewController = UIHostingController(rootView: view)
 

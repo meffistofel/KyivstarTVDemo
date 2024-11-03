@@ -178,7 +178,7 @@ extension NSCollectionLayoutSection {
 
         let pagingFooterElement = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: footerSize,
-            elementKind: SupplementaryType.pager.rawValue,
+            elementKind: HomeViewController.SupplementaryType.pager.rawValue,
             containerAnchor: anchor
         )
         section.boundarySupplementaryItems.append(pagingFooterElement)
@@ -186,7 +186,7 @@ extension NSCollectionLayoutSection {
 
     static func addHeader(to section: NSCollectionLayoutSection) {
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(24))
-        let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: SupplementaryType.header.rawValue, alignment: .top)
+        let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: HomeViewController.SupplementaryType.header.rawValue, alignment: .top)
 
         section.boundarySupplementaryItems.append(headerElement)
     }
