@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class HomeVCFactory {
     func build(coordinator: Coordinator) -> HomeViewController {
         let viewModel = HomeVM(HomeWebService: coordinator.container.homeWebService)

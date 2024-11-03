@@ -3,4 +3,82 @@
    uuid = "A406B596-82D8-4566-9E98-AF6628311449"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "60F7F856-53CF-4761-81FE-49A2BCD2A181"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DemoApp/Flows/HomeFlow/Home/HomeVM.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
+            landmarkName = "handleInputEvents()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "60F7F856-53CF-4761-81FE-49A2BCD2A181 - cb028ca6147bd1da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for DemoApp.HomeVM.handleInputEvents() async -&gt; ()"
+                  moduleName = "DemoApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alexkovalov/Downloads/KyivstarTVDemo-main/DemoApp/Flows/HomeFlow/Home/HomeVM.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "107"
+                  endingLineNumber = "107">
+               </Location>
+               <Location
+                  uuid = "60F7F856-53CF-4761-81FE-49A2BCD2A181 - 98a74d596980d5df"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) suspend resume partial function for DemoApp.HomeVM.handleInputEvents() async -&gt; ()"
+                  moduleName = "DemoApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alexkovalov/Downloads/KyivstarTVDemo-main/DemoApp/Flows/HomeFlow/Home/HomeVM.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "107"
+                  endingLineNumber = "107">
+               </Location>
+               <Location
+                  uuid = "60F7F856-53CF-4761-81FE-49A2BCD2A181 - d284276f2be161de"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for DemoApp.HomeVM.handleInputEvents() async -&gt; ()"
+                  moduleName = "DemoApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alexkovalov/Downloads/KyivstarTVDemo-main/DemoApp/Flows/HomeFlow/Home/HomeVM.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "107"
+                  endingLineNumber = "107">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "073C6A2C-5481-42D9-B0DD-B1FCDB56324D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DemoApp/Service/Coordinators/HomeFlowCoordinator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "pushAssetDetailView(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

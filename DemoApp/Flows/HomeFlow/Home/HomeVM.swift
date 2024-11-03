@@ -100,6 +100,11 @@ private extension HomeVM {
                 print("Handling fetchResource event")
                 let output = await prepareDataSource()
                 send(output: output)
+            case let .showAssetDetail(section, id):
+                guard let asset = getContentGroup(section: section, id: id) else {
+                    return
+                }
+                await coordinatorDelegate?.pushAssetDetailView(with: asset)
             }
         }
     }

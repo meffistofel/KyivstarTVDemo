@@ -21,8 +21,8 @@ final class PagingSectionFooterView: UICollectionReusableView, ReusableView {
         let control = UIPageControl()
         control.translatesAutoresizingMaskIntoConstraints = false
         control.isUserInteractionEnabled = false
-        control.currentPageIndicatorTintColor = UIColor(resource: .appFEFEFE)
-        control.pageIndicatorTintColor = UIColor(resource: .appFEFEFE).withAlphaComponent(0.25)
+        control.currentPageIndicatorTintColor = .appFEFEFE
+        control.pageIndicatorTintColor = .appFEFEFE.withAlphaComponent(0.25)
         return control
     }()
 

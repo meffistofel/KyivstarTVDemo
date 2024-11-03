@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol AssetDetailVMProtocol {
+protocol AssetDetailVMProtocol: ObservableObject {
     var outputStream: AsyncStreamResult<AssetDetailVMOutput> { get }
 
     func send(input: AssetDetailVMInput)

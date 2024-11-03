@@ -21,12 +21,14 @@ protocol HomeVMProtocol {
 
 // MARK: Coordinator Delegate
 protocol HomeVMCoordinatorDelegate: AnyObject {
-
+    @MainActor
+    func pushAssetDetailView(with asset: Asset)
 }
 
 enum HomeVMInput {
     case appear
     case fetchResource
+    case showAssetDetail(Section, Asset.ID)
 }
 
 enum HomeVMOutput {

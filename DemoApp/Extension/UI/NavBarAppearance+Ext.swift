@@ -16,19 +16,19 @@ enum UINavigationBarAppearanceType {
 extension UINavigationBarAppearance {
     func customNavBarAppearance(
         _ type: UINavigationBarAppearanceType,
-        titleColor: UIColor = UIColor(.black),
-        largeTitleColor: UIColor = UIColor(.black),
-        buttonColor: UIColor = UIColor(.black)
+        titleColor: UIColor = .black,
+        largeTitleColor: UIColor = .black,
+        buttonColor: UIColor = .black
     ) {
         let customNavBarAppearance = UINavigationBarAppearance()
 
         switch type {
         case .defaultAppear:
             customNavBarAppearance.configureWithDefaultBackground()
-            customNavBarAppearance.backgroundColor = UIColor(.white)
+            customNavBarAppearance.backgroundColor = .white
         case .opaque:
             customNavBarAppearance.configureWithOpaqueBackground()
-            customNavBarAppearance.backgroundColor = UIColor(.white)
+            customNavBarAppearance.backgroundColor = .white
             customNavBarAppearance.shadowColor = .clear
         case .transparent:
             customNavBarAppearance.configureWithTransparentBackground()
