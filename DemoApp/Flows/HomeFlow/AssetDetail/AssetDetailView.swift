@@ -11,8 +11,8 @@ struct AssetDetailView: View {
 
     @StateObject private var viewModel: AssetDetailVM
 
-    init(viewModel: AssetDetailVM) {
-        self._viewModel = .init(wrappedValue: viewModel)
+    init(asset: Asset, coordinatorDelegate: Coordinator) {
+        self._viewModel = .init(wrappedValue: .init(asset: asset, coordinatorDelegate: coordinatorDelegate))
     }
 
     var body: some View {
@@ -22,6 +22,6 @@ struct AssetDetailView: View {
     }
 }
 
-#Preview {
-    AssetDetailView(viewModel: AssetDetailVM())
-}
+//#Preview {
+//    AssetDetailView(viewModel: AssetDetailVM())
+//}
