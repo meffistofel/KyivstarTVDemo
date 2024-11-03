@@ -153,7 +153,7 @@ extension NSCollectionLayoutSection {
         let groupHeight = groupWidth / 3
 
         let item: NSCollectionLayoutItem = .configItem(itemWidthDimensio: .fractionalWidth(1/3), itemHeightDimensio: .fractionalHeight(1))
-        
+
         let group: NSCollectionLayoutGroup = .configGroup(
             groupWidthDimensio: .absolute(groupWidth),
             groupHeightDimensio: .absolute(groupHeight + 16),

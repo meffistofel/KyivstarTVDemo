@@ -129,13 +129,10 @@ private extension HomeVM {
                         sectionTitles[section] = contentType.rawValue
                     }
 
-                    // Перевіряємо, чи вже існує ключ у словнику
                     if let existingAssets = channels[contentType] {
-                        // Якщо існує, об'єднуємо старі і нові значення
                         let newAssets = Dictionary(uniqueKeysWithValues: contentGroup.assets.map { ($0.id, $0) })
                         channels[contentType] = existingAssets.merging(newAssets) { (current, _) in current }
                     } else {
-                        // Якщо не існує, просто додаємо нові значення
                         channels[contentType] = Dictionary(uniqueKeysWithValues: contentGroup.assets.map { ($0.id, $0) })
                     }
                 }

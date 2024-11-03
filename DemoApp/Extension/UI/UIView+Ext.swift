@@ -140,10 +140,8 @@ extension UIView {
        func sizeWithAspectRatio(widthRatio: CGFloat, heightRatio: CGFloat) -> [NSLayoutConstraint] {
            self.translatesAutoresizingMaskIntoConstraints = false
 
-           // Вираховуємо співвідношення ширини до висоти
            let aspectRatio = widthRatio / heightRatio
 
-           // Створюємо constraint для співвідношення сторін (width:height = widthRatio:heightRatio)
            let aspectRatioConstraint = self.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: aspectRatio)
 
            NSLayoutConstraint.activate([aspectRatioConstraint])
