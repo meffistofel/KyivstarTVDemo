@@ -19,6 +19,11 @@ protocol HomeVMProtocol {
     func getSectionTitle(section: Section) -> String?
 }
 
+// MARK: Coordinator Delegate
+protocol HomeVMCoordinatorDelegate: AnyObject {
+
+}
+
 enum HomeVMInput {
     case appear
     case fetchResource
@@ -37,18 +42,6 @@ enum Section: Int, CaseIterable {
     case series
     case liveChannel
     case epg
-
-    init?(group: GroupType) {
-        switch group {
-        case .series:
-            self = .series
-        case .liveChannel:
-            self = .liveChannel
-        case .epg:
-            self = .epg
-        case .unknown: return nil
-        }
-    }
 }
 
 enum SectionItem: Hashable {
@@ -59,12 +52,15 @@ enum SectionItem: Hashable {
     case categories(Category.ID)
 }
 
-struct SectionData {
-    var key: Section
-    var values: [SectionItem]
+enum SupplementaryType: String {
+    case pager
+    case header
 }
 
-// MARK: Coordinator Delegate
-protocol HomeVMCoordinatorDelegate: AnyObject {
+struct SectionData: DataSourceProtocol {
+    typealias Key = Section
+    typealias Value = SectionItem
 
+    var key: Section
+    var values: [SectionItem]
 }

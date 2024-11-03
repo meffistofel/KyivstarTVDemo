@@ -33,9 +33,7 @@ class HomeCollectionView: UICollectionView {
         config.interSectionSpacing = 32
 
         let layout = UICollectionViewCompositionalLayout(
-            sectionProvider: {
-                [unowned self] sectionIndex,
-                layoutEnvironment in
+            sectionProvider: { [unowned self] sectionIndex, layoutEnvironment in
                 guard let section = onGetSection(sectionIndex) else {
                     return nil
                 }
@@ -194,7 +192,7 @@ private extension NSCollectionLayoutSection {
 
         let pagingFooterElement = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: footerSize,
-            elementKind: HomeViewController.SupplementaryType.pager.rawValue,
+            elementKind: SupplementaryType.pager.rawValue,
             containerAnchor: anchor
         )
         section.boundarySupplementaryItems.append(pagingFooterElement)
@@ -202,7 +200,7 @@ private extension NSCollectionLayoutSection {
 
     static func addHeader(to section: NSCollectionLayoutSection) {
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(24))
-        let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: HomeViewController.SupplementaryType.header.rawValue, alignment: .top)
+        let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: SupplementaryType.header.rawValue, alignment: .top)
 
         section.boundarySupplementaryItems.append(headerElement)
     }
