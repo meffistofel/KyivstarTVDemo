@@ -112,7 +112,7 @@ private extension HomeViewController {
         case .idle:
             print("Idle")
         case .fetchedResource(let sources):
-            reload(sources)
+            dataSource.reload(sources)
             logger.debug("Fetched source and reload has been success")
         case .error(let error):
             logger.error("\(error.localizedDescription)")
@@ -120,15 +120,9 @@ private extension HomeViewController {
     }
 }
 
-// MARK: DataSource
 
 extension HomeViewController {
-    enum SupplementaryType: String {
-        case pager
-        case header
-    }
-
-    private func setupDataSource() -> UICollectionViewDiffableDataSource<Section, SectionItem> {
+    func setupDataSource() -> UICollectionViewDiffableDataSource<Section, SectionItem> {
         UICollectionViewDiffableDataSource(collectionView: collectionView) { [unowned self] collectionView, indexPath, itemIdentifier in
             guard let section = dataSource.sectionIdentifier(for: indexPath.section) else {
                 return nil
@@ -174,27 +168,25 @@ extension HomeViewController {
         }
     }
 
-    private func configSupplementaryView() {
+    func configSupplementaryView() {
         dataSource.supplementaryViewProvider = { [unowned self] (collectionView, kind, indexPath) in
 
             guard let section = dataSource.sectionIdentifier(for: indexPath.section) else {
                 return nil
             }
 
-            if kind == SupplementaryType.pager.rawValue {
-                if section == .promotions {
-                    let pagingFooter: PagingSectionFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
+            if kind == SupplementaryType.pager.rawValue, section.isNeedPager {
+                let pagingFooter: PagingSectionFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, indexPath: indexPath)
 
-                    let itemCount = dataSource.snapshot().numberOfItems(inSection: section)
-                    pagingFooter.configure(with: itemCount)
+                let itemCount = dataSource.snapshot().numberOfItems(inSection: section)
+                pagingFooter.configure(with: itemCount)
 
-                    pagingFooter.subscribeTo(subject: pagingInfoSubject, for: indexPath.section)
+                pagingFooter.subscribeTo(subject: pagingInfoSubject, for: indexPath.section)
 
-                    return pagingFooter
-                }
+                return pagingFooter
             }
 
-            guard section != .promotions else {
+            guard section.isNeedHeader else {
                 return nil
             }
 
@@ -204,32 +196,26 @@ extension HomeViewController {
             header.config(with: sectionTitle)
 
             header.onTapDelete = { [weak self] in
-                self?.removeSection(section)
+                self?.dataSource.removeSection(section)
             }
 
             return header
         }
     }
+}
 
-    private func reload(_ data: [SectionData], animated: Bool = false) {
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteAllItems()
-        for item in data {
-            snapshot.appendSections([item.key])
-            snapshot.appendItems(item.values, toSection: item.key)
+private extension Section {
+    var isNeedPager: Bool {
+        switch self {
+        case .promotions: true
+        default: false
         }
-        dataSource.apply(snapshot, animatingDifferences: animated)
     }
 
-    func removeSection(_ section: Section) {
-        // Отримуємо поточний знімок
-        var snapshot = dataSource.snapshot()
-
-        // Видаляємо секцію
-        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: section))
-        snapshot.deleteSections([section])
-
-        // Застосовуємо оновлений знімок
-        dataSource.apply(snapshot, animatingDifferences: true)
+    var isNeedHeader: Bool {
+        switch self {
+        case .promotions: false
+        default: true
+        }
     }
 }

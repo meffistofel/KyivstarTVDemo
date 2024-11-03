@@ -173,3 +173,17 @@ private extension HomeVM {
         }
     }
 }
+
+private extension Section {
+    init?(group: GroupType) {
+        switch group {
+        case .series:
+            self = .series
+        case .liveChannel:
+            self = .liveChannel
+        case .epg:
+            self = .epg
+        case .unknown: return nil
+        }
+    }
+}
