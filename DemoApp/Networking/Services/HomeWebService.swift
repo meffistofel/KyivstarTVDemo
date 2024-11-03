@@ -14,7 +14,7 @@ protocol HomeWebServiceProtocol {
     func getAssetDetails() async throws -> AssetDetailModel
 }
 
-class HomeWebService: HomeWebServiceProtocol {
+final class HomeWebService: HomeWebServiceProtocol {
 
     private let networkService: NetworkServiceProtocol
 

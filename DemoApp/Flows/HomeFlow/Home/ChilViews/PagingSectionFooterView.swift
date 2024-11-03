@@ -13,7 +13,7 @@ struct PagingInfo: Equatable, Hashable {
     let currentPage: Int
 }
 
-class PagingSectionFooterView: UICollectionReusableView, ReusableView {
+final class PagingSectionFooterView: UICollectionReusableView, ReusableView {
 
     private var pagingInfoToken: AnyCancellable?
 

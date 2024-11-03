@@ -1,13 +1,13 @@
 //
-//  EPGCell.swift
+//  GroupsCell.swift
 //  DemoApp
 //
-//  Created by Alex Kovalov on 11/2/24.
+//  Created by Alex Kovalov on 10/31/24.
 //
 
 import UIKit
 
-class EPGCell: UICollectionViewCell, ReusableView {
+final class SeriesCell: UICollectionViewCell, ReusableView {
 
     private var task: Task<Void, Never>?
 
@@ -17,8 +17,8 @@ class EPGCell: UICollectionViewCell, ReusableView {
         return pv
     }()
 
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
+    private lazy var titleLabel: CustomLabel = {
+        let label = CustomLabel()
         label.font = .sfProRounded(.bold, size: 12)
         label.textColor = UIColor(resource: .app1E2228)
         label.textAlignment = .left
@@ -26,28 +26,10 @@ class EPGCell: UICollectionViewCell, ReusableView {
         return label
     }()
 
-    private lazy var subTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .sfProRounded(.medium, size: 11)
-        label.textColor = UIColor(resource: .app808890)
-        label.textAlignment = .left
-
-        return label
-    }()
-
-    private lazy var mainVStack: UIStackView = {
+    private lazy var vStack: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
         sv.spacing = 8
-
-        return sv
-    }()
-
-    private lazy var infoVStack: UIStackView = {
-        let sv = UIStackView()
-        sv.axis = .vertical
-        sv.spacing = 2
-        sv.alignment = .leading
 
         return sv
     }()
@@ -84,14 +66,17 @@ class EPGCell: UICollectionViewCell, ReusableView {
     }
 }
 
-extension EPGCell {
+extension SeriesCell {
     func configure(with model: CellModel) {
         titleLabel.text = model.name
-
-        subTitleLabel.text = "У записі • \(model.company)"
+        titleLabel.textAlignment = .left
 
         task = Task {
-            await posterImageView.loadRemoteImageFrom(urlString: model.imageURL)
+            do {
+                try await posterImageView.loadRemoteImageFrom(urlString: model.imageURL)
+            } catch  {
+                print(error)
+            }
         }
 
         if !model.purchased {
@@ -121,33 +106,28 @@ extension EPGCell {
         contentView.backgroundColor = .clear
         posterImageView.layer.cornerRadius = 12
         posterImageView.layer.masksToBounds = true
-        posterImageView.sizeWithAspectRatio(widthRatio: 216, heightRatio: 120)
+        posterImageView.sizeWithAspectRatio(widthRatio: 104, heightRatio: 156)
 
         titleLabel.numberOfLines = 0
 
-        infoVStack.addArrangedSubview(titleLabel)
-        infoVStack.addArrangedSubview(subTitleLabel)
+        vStack.addArrangedSubview(posterImageView)
+        vStack.addArrangedSubview(titleLabel)
 
-        mainVStack.addArrangedSubview(posterImageView)
-        mainVStack.addArrangedSubview(infoVStack)
+        contentView.addSubview(vStack)
 
-        contentView.addSubview(mainVStack)
-
-        mainVStack.equalToSuperview()
+        vStack.equalToSuperview()
     }
 }
 
-extension EPGCell {
+extension SeriesCell {
     struct CellModel {
         let name: String
-        let company: String
         let imageURL: String
         let purchased: Bool
         let progress: Int
 
         init(model: Asset) {
             self.name = model.name
-            self.company = model.company
             self.imageURL = model.image
             self.purchased = model.purchased
             self.progress = model.progress

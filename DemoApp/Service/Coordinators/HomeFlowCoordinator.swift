@@ -13,7 +13,7 @@ protocol HomeFlowCoordinatorDelegate: AnyObject {
 }
 
 // MARK: - HomeFlowCoordinator
-class HomeFlowCoordinator: Coordinator {
+final class HomeFlowCoordinator: Coordinator {
 
     // MARK: - Properties
     let window: UIWindow?

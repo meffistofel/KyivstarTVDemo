@@ -27,7 +27,6 @@ protocol HomeVMCoordinatorDelegate: AnyObject {
 enum HomeVMInput {
     case appear
     case fetchResource
-    case cancel
 }
 
 enum HomeVMOutput {
@@ -57,10 +56,7 @@ enum SupplementaryType: String {
     case header
 }
 
-struct SectionData: DataSourceProtocol {
-    typealias Key = Section
-    typealias Value = SectionItem
-
+struct SectionData {
     var key: Section
     var values: [SectionItem]
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomLabel: UILabel {
+final class CustomLabel: UILabel {
     override func drawText(in rect: CGRect) {
         guard let text = self.text else { return super.drawText(in: rect) }
 
