@@ -21,6 +21,7 @@ struct SimilarView: View {
         LazyVGrid(columns: columns, spacing: 16) {
             ForEach(similar ?? Similar.mocks) { item in
                 AsyncImageApp(url: item.urlImage, height: 156)
+                    .frame(maxWidth: .infinity)
                     .clipShape(.rect(cornerRadius: 12))
                     .overlay(alignment: .topLeading) {
                         if !item.purchased && isLoaded {

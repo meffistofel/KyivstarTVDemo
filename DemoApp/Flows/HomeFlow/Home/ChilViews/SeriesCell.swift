@@ -36,7 +36,6 @@ final class SeriesCell: UICollectionViewCell, ReusableView {
 
     private let lockImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(resource: .iconLock)
 
         return iv
     }()
@@ -60,6 +59,7 @@ final class SeriesCell: UICollectionViewCell, ReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
         posterImageView.image = nil
+        lockImageView.image = nil
         titleLabel.text = nil
         task?.cancel()
         task = nil
@@ -79,9 +79,12 @@ extension SeriesCell {
             }
         }
 
+        print(model.name, model.purchased)
+
         if !model.purchased {
             posterImageView.addSubview(lockImageView)
 
+            lockImageView.image = .iconLock
             lockImageView.anchor(
                 top: .init(anchor: posterImageView.topAnchor, padding: 8),
                 leading: .init(anchor: posterImageView.leadingAnchor, padding: 8)

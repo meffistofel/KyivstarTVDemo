@@ -17,7 +17,7 @@ struct StrechableHeader<Content: View>: View {
 
         GeometryReader { geo in
             let height = geo.size.height
-            let newHeight = yOffset > 0 ? height + yOffset : max(height / 1.5, height + yOffset)
+            let newHeight = yOffset > 0 ? height + yOffset : max(height / 1.3, height + yOffset)
 
             content()
                 .frame(height: newHeight, alignment: .top)
