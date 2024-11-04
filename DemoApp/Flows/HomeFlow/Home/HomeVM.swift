@@ -105,8 +105,11 @@ private extension HomeVM {
                 guard let asset = getContentGroup(section: section, id: id), asset.purchased else {
                     break
                 }
-
                 await coordinatorDelegate?.pushAssetDetailView(with: asset.id)
+            case .showPromotion(let id):
+                print("Some logic with promotion \(id)")
+            case .showCategory(let id):
+                print("Some logic with category \(id)")
             }
         }
     }
@@ -177,6 +180,8 @@ extension HomeVM {
     enum Input {
         case appear
         case fetchResource
+        case showPromotion(Promotion.ID)
+        case showCategory(Category.ID)
         case showAssetDetail(Section, Asset.ID)
     }
 

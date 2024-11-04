@@ -48,7 +48,7 @@ class Coordinator {
 }
 
 extension Coordinator: Equatable {
-    static func == (lhs: Coordinator, rhs: Coordinator) -> Bool {
+    nonisolated static func == (lhs: Coordinator, rhs: Coordinator) -> Bool {
         return lhs === rhs
     }
 }

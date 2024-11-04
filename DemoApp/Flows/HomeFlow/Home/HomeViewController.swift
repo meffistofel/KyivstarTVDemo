@@ -80,10 +80,12 @@ extension HomeViewController: UICollectionViewDelegate {
             guard case let .categories(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
+            viewModel.send(input: .showCategory(id))
         case .promotions:
             guard case let .promotions(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
+            viewModel.send(input: .showPromotion(id))
         case .series:
             guard case let .series(id) = dataSource.itemIdentifier(for: indexPath) else {
                 return
