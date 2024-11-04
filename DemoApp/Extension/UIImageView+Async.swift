@@ -8,24 +8,35 @@
 import Foundation
 import UIKit
 
+@globalActor
+actor BackgroundActor {
+    static let shared = BackgroundActor()
+}
+
 let imageCache = NSCache<AnyObject, AnyObject>()
 
 extension UIImageView {
 
-    @MainActor
+    @BackgroundActor
     func loadRemoteImageFrom(urlString: String) async throws {
         guard let url = URL(string: urlString) else {
             return
         }
-        image = nil
+        await MainActor.run {
+            image = nil
+        }
 
         if let imageFromCache = imageCache.object(forKey: urlString as AnyObject) as? UIImage {
-            self.image = imageFromCache
-            hideActivityIndicatorView()
+            await MainActor.run {
+                self.image = imageFromCache
+                hideActivityIndicatorView()
+            }
             return
         }
 
-        showActivityIndicator(color: .black)
+        await MainActor.run {
+            showActivityIndicator(color: .black)
+        }
 
         guard !Task.isCancelled else {
             return
@@ -33,13 +44,19 @@ extension UIImageView {
 
         let (data, _) = try await URLSession.shared.data(from: url)
 
-        self.hideActivityIndicatorView()
+        await MainActor.run {
+            self.hideActivityIndicatorView()
+        }
 
         if let imageToCache = UIImage(data: data) {
             imageCache.setObject(imageToCache, forKey: urlString as AnyObject)
-            self.image = imageToCache
+            await MainActor.run {
+                self.image = imageToCache
+            }
         } else {
-            self.image = UIImage(systemName: "questionmark.circle.fill")
+            await MainActor.run {
+                self.image = UIImage(systemName: "questionmark.circle.fill")
+            }
         }
     }
 }

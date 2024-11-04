@@ -54,10 +54,13 @@ struct AssetDetailView: View {
 private extension AssetDetailView {
     var headerContent: some View {
         VStack(spacing: 0) {
+            let maxScaleFactor = 1.7
             let height: CGFloat = .relative(to: .height, value: 211)
-            let newHeight = offset.y > 0 ? height + offset.y : max(height / 1.5, height + offset.y)
+            let newHeight = offset.y > 0 ? min(height * maxScaleFactor, height + offset.y) : height
+            let scale = min(max(newHeight / height, 1), maxScaleFactor)
 
             AsyncImageApp(url: viewModel.asset?.urlImage, height: newHeight)
+                .scaleEffect(x: scale, anchor: .bottom)
 
             HStack(spacing: 0) {
                 PlayButton(isPlay: isPlay, isLoaded: viewModel.loadingIsCompleted) {
