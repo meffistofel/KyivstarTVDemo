@@ -13,7 +13,6 @@ final class LiveChannelCell: UICollectionViewCell, ReusableView {
 
     private let lockImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(resource: .iconLock)
 
         return iv
     }()
@@ -37,6 +36,7 @@ final class LiveChannelCell: UICollectionViewCell, ReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
         posterImageView.image = nil
+        lockImageView.image = nil
         task?.cancel()
         task = nil
     }
@@ -54,6 +54,7 @@ final class LiveChannelCell: UICollectionViewCell, ReusableView {
         if !model.purchased {
             contentView.addSubview(lockImageView)
 
+            lockImageView.image = .iconLock
             lockImageView.anchor(
                 top: .init(anchor: posterImageView.topAnchor, padding: 0),
                 leading: .init(anchor: posterImageView.leadingAnchor, padding: 0),

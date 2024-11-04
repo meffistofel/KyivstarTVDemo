@@ -15,7 +15,7 @@ struct AssetDetailView: View {
     @State private var isFavorite: Bool = false
     @State private var offset: CGPoint = .zero
 
-    let coordinateSpaceName: UUID = UUID()
+    private let coordinateSpaceName: UUID = UUID()
 
     init(viewModel: AssetDetailVM) {
         self._viewModel = .init(wrappedValue: viewModel)
@@ -56,18 +56,19 @@ private extension AssetDetailView {
         VStack(spacing: 0) {
             let height: CGFloat = .relative(to: .height, value: 211)
             let newHeight = offset.y > 0 ? height + offset.y : max(height / 1.5, height + offset.y)
-            let _ = print(newHeight)
 
             AsyncImageApp(url: viewModel.asset?.urlImage, height: newHeight)
 
             HStack(spacing: 0) {
                 PlayButton(isPlay: isPlay, isLoaded: viewModel.loadingIsCompleted) {
                     isPlay.toggle()
+                    // some logic
                 }
 
                 Spacer()
                 FavoriteButton(isFavorite: isFavorite, isLoaded: viewModel.loadingIsCompleted) {
                     isFavorite.toggle()
+                    // some logic
                 }
             }
             .padding(.top, 12)
@@ -122,3 +123,4 @@ private extension AssetDetailView {
         )
     )
 }
+

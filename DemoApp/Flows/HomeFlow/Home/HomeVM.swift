@@ -94,15 +94,16 @@ private extension HomeVM {
         for await event in inputStream.stream {
             switch event {
             case .appear:
-                print("Handling appear event")
+                logger.debug("Handling appear event")
                 send(output: .idle)
             case .fetchResource:
-                print("Handling fetchResource event")
+                logger.debug("Handling fetchResource event")
                 let output = await prepareDataSource()
                 send(output: output)
             case let .showAssetDetail(section, id):
+                logger.debug("Did Tap show detail asset")
                 guard let asset = getContentGroup(section: section, id: id), asset.purchased else {
-                    return
+                    break
                 }
 
                 await coordinatorDelegate?.pushAssetDetailView(with: asset.id)

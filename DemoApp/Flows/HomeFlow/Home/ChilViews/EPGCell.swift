@@ -54,7 +54,6 @@ final class EPGCell: UICollectionViewCell, ReusableView {
 
     private let lockImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(resource: .iconLock)
 
         return iv
     }()
@@ -78,6 +77,7 @@ final class EPGCell: UICollectionViewCell, ReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
         posterImageView.image = nil
+        lockImageView.image = nil
         titleLabel.text = nil
         task?.cancel()
         task = nil
@@ -101,6 +101,7 @@ extension EPGCell {
         if !model.purchased {
             posterImageView.addSubview(lockImageView)
 
+            lockImageView.image = .iconLock
             lockImageView.anchor(
                 top: .init(anchor: posterImageView.topAnchor, padding: 8),
                 leading: .init(anchor: posterImageView.leadingAnchor, padding: 8)
